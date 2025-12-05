@@ -15,6 +15,21 @@ namespace ApiECommerce.Controllers
     {
         private readonly AppDbContext _context;
 
+        // shared helper to extract a price from a JsonElement using several possible property names
+        private static decimal? ExtractPriceFromElement(JsonElement el)
+        {
+            var names = new[] { "PrecoRetirar", "PrecoEntrega", "PrecoQuente", "PrecoGelada", "Preco", "PrecoUnitario", "ProdutoPreco" };
+            foreach (var n in names)
+            {
+                if (el.TryGetProperty(n, out var prop))
+                {
+                    if (prop.ValueKind == JsonValueKind.Number && prop.TryGetDecimal(out var d)) return d;
+                    if (prop.ValueKind == JsonValueKind.String && decimal.TryParse(prop.GetString(), out var d2)) return d2;
+                }
+            }
+            return null;
+        }
+
         public ImpressaoController(AppDbContext context)
         {
             _context = context;
@@ -55,6 +70,21 @@ namespace ApiECommerce.Controllers
             var items = new List<PedidoDetalheDTO>();
             if (payload.TryGetProperty("Itens", out var itensElem) && itensElem.ValueKind == JsonValueKind.Array)
             {
+                // local helper to extract price fields from an element
+                static decimal? ExtractPriceFromElement(JsonElement el)
+                {
+                    var names = new[] { "PrecoRetirar", "PrecoEntrega", "PrecoQuente", "PrecoGelada", "Preco", "PrecoUnitario", "ProdutoPreco" };
+                    foreach (var n in names)
+                    {
+                        if (el.TryGetProperty(n, out var prop))
+                        {
+                            if (prop.ValueKind == JsonValueKind.Number && prop.TryGetDecimal(out var d)) return d;
+                            if (prop.ValueKind == JsonValueKind.String && decimal.TryParse(prop.GetString(), out var d2)) return d2;
+                        }
+                    }
+                    return null;
+                }
+
                 foreach (var it in itensElem.EnumerateArray())
                 {
                     int produtoId = 0;
@@ -72,8 +102,8 @@ namespace ApiECommerce.Controllers
                             produtoId = pidv;
                         if (prodObj.TryGetProperty("Nome", out var pnome) && pnome.ValueKind == JsonValueKind.String)
                             produtoNome = pnome.GetString();
-                        if (prodObj.TryGetProperty("Preco", out var ppre) && ppre.ValueKind == JsonValueKind.Number && ppre.TryGetDecimal(out var pdec))
-                            preco = pdec;
+                        var extracted = ExtractPriceFromElement(prodObj);
+                        if (extracted.HasValue) preco = extracted.Value;
                     }
 
                     if (it.TryGetProperty("ProdutoPreco", out var ppreco) && ppreco.ValueKind == JsonValueKind.Number && ppreco.TryGetDecimal(out var pdec2))
@@ -217,8 +247,8 @@ namespace ApiECommerce.Controllers
                             produtoId = pidv;
                         if (prodObj.TryGetProperty("Nome", out var pnome) && pnome.ValueKind == JsonValueKind.String)
                             produtoNome = pnome.GetString();
-                        if (prodObj.TryGetProperty("Preco", out var ppre) && ppre.ValueKind == JsonValueKind.Number && ppre.TryGetDecimal(out var pdec))
-                            preco = pdec;
+                        var extracted2 = ExtractPriceFromElement(prodObj);
+                        if (extracted2.HasValue) preco = extracted2.Value;
                     }
                     if (it.TryGetProperty("ProdutoPreco", out var ppreco) && ppreco.ValueKind == JsonValueKind.Number && ppreco.TryGetDecimal(out var pdec2))
                         preco = pdec2;

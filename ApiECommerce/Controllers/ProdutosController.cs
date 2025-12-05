@@ -56,7 +56,11 @@ public class ProdutosController : ControllerBase
         {
             Id = v.Id,
             Nome = v.Nome,
-            Preco = v.Preco,
+            Preco = v.PrecoRetirar, // default listing price uses take-away price
+            PrecoQuente = v.PrecoQuente,
+            PrecoGelada = v.PrecoGelada,
+            PrecoEntrega = v.PrecoEntrega,
+            PrecoRetirar = v.PrecoRetirar,
             UrlImagem = v.UrlImagem,
             CategoriaId = v.CategoriaId
         });
@@ -66,7 +70,7 @@ public class ProdutosController : ControllerBase
 
     // POST: api/Produtos/barcodelookup/consulta
     [HttpPost("barcodelookup/consulta")]
-    public async Task<IActionResult> BarcodeLookupConsulta([FromBody] JsonElement payload, [FromQuery] string? token = null, [FromQuery] string? gtin = null)
+    public async Task<IActionResult> BarcodeLookupConsulta([FromBody] JsonElement payload, [FromQuery] string? token = "lRiZUaRszf2jfobKvHP4lw", [FromQuery] string? gtin = null)
     {
         // Accept payload as:
         // - a plain JSON string: "0123456789012"
@@ -294,7 +298,11 @@ public class ProdutosController : ControllerBase
         {
             Id = produto.Id,
             Nome = produto.Nome,
-            Preco = produto.Preco,
+            Preco = produto.PrecoRetirar,
+            PrecoQuente = produto.PrecoQuente,
+            PrecoGelada = produto.PrecoGelada,
+            PrecoEntrega = produto.PrecoEntrega,
+            PrecoRetirar = produto.PrecoRetirar,
             Detalhe = produto.Detalhe,
             UrlImagem = produto.UrlImagem
         };
@@ -313,7 +321,11 @@ public class ProdutosController : ControllerBase
         {
             Id = v.Id,
             Nome = v.Nome,
-            Preco = v.Preco,
+            Preco = v.PrecoRetirar,
+            PrecoQuente = v.PrecoQuente,
+            PrecoGelada = v.PrecoGelada,
+            PrecoEntrega = v.PrecoEntrega,
+            PrecoRetirar = v.PrecoRetirar,
             Barcode = v.Barcode,
             UrlImagem = v.UrlImagem,
             CategoriaId = v.CategoriaId,
@@ -426,7 +438,11 @@ public class ProdutosController : ControllerBase
             {
                 Id = v.Id,
                 Nome = v.Nome,
-                Preco = v.Preco,
+                Preco = v.PrecoRetirar,
+                PrecoQuente = v.PrecoQuente,
+                PrecoGelada = v.PrecoGelada,
+                PrecoEntrega = v.PrecoEntrega,
+                PrecoRetirar = v.PrecoRetirar,
                 Barcode = v.Barcode,
                 UrlImagem = v.UrlImagem,
                 CategoriaId = v.CategoriaId,

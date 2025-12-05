@@ -19,7 +19,26 @@ public class Produto
 
     [Required]
     [Column(TypeName = "decimal(10,2)")]
-    public decimal Preco { get; set; }
+    public decimal PrecoCusto { get; set; }
+
+    [Column(TypeName = "decimal(10,2)")]
+    public decimal PrecoQuente { get; set; }
+
+    [Column(TypeName = "decimal(10,2)")]
+    public decimal PrecoGelada { get; set; }
+
+    [Column(TypeName = "decimal(10,2)")]
+    public decimal PrecoEntrega { get; set; }
+
+    [Column(TypeName = "decimal(10,2)")]
+    public decimal PrecoRetirar { get; set; }
+    
+    [NotMapped]
+    public decimal Preco
+    {
+        get => PrecoRetirar;
+        set => PrecoRetirar = value;
+    }
        public bool Popular { get; set; }
     public bool MaisVendido { get; set; }
     public int EmEstoque { get; set; }
