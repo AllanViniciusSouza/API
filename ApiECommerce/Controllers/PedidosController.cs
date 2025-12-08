@@ -193,7 +193,12 @@ public class PedidosController : ControllerBase
             }).ToList();
 
         // validar ids de produto (apenas >0)
-        var productIds = normalizedItems.Select(x => x.ProdutoId).Where(id => id > 0).Distinct().ToList();
+        var productIds = normalizedItems
+            .Select(x => x.ProdutoId)
+            .Where(id => id.HasValue && id.Value > 0)
+            .Select(id => id!.Value)
+            .Distinct()
+            .ToList();
         var existing = await dbContext.Produtos.Where(p => productIds.Contains(p.Id)).Select(p => p.Id).ToListAsync();
         var missing = productIds.Except(existing).ToList();
         if (missing.Any())
@@ -215,7 +220,7 @@ public class PedidosController : ControllerBase
             DataPagamentoPrazo2 = pedido.DataPagamentoPrazo2,
             Observacoes = pedido.Observacoes,
             Itens = normalizedItems.Select(x => new DetalhePedido {
-                ProdutoId = x.ProdutoId,
+                ProdutoId = (x.ProdutoId.HasValue && x.ProdutoId.Value > 0) ? x.ProdutoId.Value : (int?)null,
                 ProdutoNome = string.IsNullOrWhiteSpace(x.ProdutoNome) ? null : x.ProdutoNome,
                 Preco = x.Preco,
                 Quantidade = x.Quantidade,

@@ -37,7 +37,7 @@ public class PedidoDTO
 public class PedidoDetalheDTO
 {
     public int Id { get; set; }
-    public int ProdutoId { get; set; }
+    public int? ProdutoId { get; set; }
     public string? ProdutoNome { get; set; }
     public string? ProdutoImagem { get; set; }
     public int Quantidade { get; set; }

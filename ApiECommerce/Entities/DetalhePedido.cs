@@ -17,7 +17,8 @@ public class DetalhePedido
     public int PedidoId { get; set; }
     public Pedido Pedido { get; set; }
     // relacionamento com o produto pedido
-    public int ProdutoId { get; set; }
+    // Pode ser null para itens avulsos (ProdutoId == null)
+    public int? ProdutoId { get; set; }
     public Produto? Produto { get; set; }
     // When ProdutoId == 0 (item avulso) we store the product name here
     public string? ProdutoNome { get; set; }
