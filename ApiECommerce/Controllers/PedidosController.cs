@@ -93,7 +93,10 @@ public class PedidosController : ControllerBase
                                 ValorPago2 = null,
                                 Status = string.Empty,
                                 ClienteNome = pedido.ClienteNome != null ? pedido.ClienteNome : null,
-                                VendedorNome = pedido.Usuario != null ? pedido.Usuario.Nome : null
+                                VendedorNome = pedido.Usuario != null ? pedido.Usuario.Nome : null,
+                                DataPagamentoPrazo = pedido.DataPagamentoPrazo,
+                                DataPagamentoPrazo2 = pedido.DataPagamentoPrazo2,
+                                Observacoes = pedido.Observacoes
                             }).ToListAsync();
 
 
@@ -121,7 +124,7 @@ public class PedidosController : ControllerBase
                 {
                     Id = d.Id,
                     ProdutoId = d.ProdutoId,
-                    ProdutoNome = d.Produto != null ? d.Produto.Nome : null,
+                    ProdutoNome = d.Produto != null ? d.Produto.Nome : d.ProdutoNome,
                     ProdutoImagem = d.Produto != null ? d.Produto.UrlImagem : null,
                     Quantidade = d.Quantidade,
                     ProdutoPreco = d.Preco,
@@ -183,6 +186,7 @@ public class PedidosController : ControllerBase
         var normalizedItems = (pedido.Itens ?? new List<PedidoDetalheDTO>())
             .Select(i => new {
                 ProdutoId = i.ProdutoId,
+                ProdutoNome = i.ProdutoNome,
                 Preco = i.ProdutoPreco,
                 Quantidade = i.Quantidade,
                 SubTotal = i.SubTotal
@@ -207,8 +211,12 @@ public class PedidosController : ControllerBase
             Status = pedido.Status,
             ClienteNome = pedido.ClienteNome,
             VendedorNome = pedido.VendedorNome,
+            DataPagamentoPrazo = pedido.DataPagamentoPrazo,
+            DataPagamentoPrazo2 = pedido.DataPagamentoPrazo2,
+            Observacoes = pedido.Observacoes,
             Itens = normalizedItems.Select(x => new DetalhePedido {
                 ProdutoId = x.ProdutoId,
+                ProdutoNome = string.IsNullOrWhiteSpace(x.ProdutoNome) ? null : x.ProdutoNome,
                 Preco = x.Preco,
                 Quantidade = x.Quantidade,
                 ValorTotal = x.SubTotal,

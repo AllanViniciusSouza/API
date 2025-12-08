@@ -22,6 +22,11 @@ public class PedidoDTO
     // New fields requested by front-end
     public string? ClienteNome { get; set; }
     public string? VendedorNome { get; set; }
+    public DateTime? DataPagamentoPrazo { get; set; }
+    public DateTime? DataPagamentoPrazo2 { get; set; }
+
+    // Observações livres do pedido
+    public string? Observacoes { get; set; }
 
     // Item details
     public List<PedidoDetalheDTO>? Itens { get; set; }

@@ -25,6 +25,13 @@ public class Pedido
     public string? ClienteNome { get; set; }
     public string? VendedorNome { get; set; }
 
+    // Data de pagamento quando a forma de pagamento for "A Prazo"
+    public DateTime? DataPagamentoPrazo { get; set; }
+    public DateTime? DataPagamentoPrazo2 { get; set; }
+
+    // Observações livres do pedido (anotações do caixa/front-end)
+    public string? Observacoes { get; set; }
+
     // Relacionamento: Um Pedido tem um usuário (vendedor)
     [JsonIgnore]
     public int? UsuarioId { get; set; }
