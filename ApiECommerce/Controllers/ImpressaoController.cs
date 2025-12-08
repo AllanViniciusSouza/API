@@ -168,13 +168,17 @@ namespace ApiECommerce.Controllers
             }
 
             // For items with ProdutoId but missing ProdutoNome, fetch names
-            var idsToFetch = items.Where(i => (i.ProdutoId > 0) && string.IsNullOrWhiteSpace(i.ProdutoNome)).Select(i => i.ProdutoId).Distinct().ToList();
+            var idsToFetch = items
+                .Where(i => i.ProdutoId.HasValue && i.ProdutoId.Value > 0 && string.IsNullOrWhiteSpace(i.ProdutoNome))
+                .Select(i => i.ProdutoId.Value)
+                .Distinct()
+                .ToList();
             if (idsToFetch.Any())
             {
                 var prods = await _context.Produtos.Where(p => idsToFetch.Contains(p.Id)).ToDictionaryAsync(p => p.Id, p => p.Nome);
                 foreach (var it in items)
                 {
-                    if (it.ProdutoId > 0 && string.IsNullOrWhiteSpace(it.ProdutoNome) && prods.TryGetValue(it.ProdutoId, out var nome))
+                    if (it.ProdutoId.HasValue && it.ProdutoId.Value > 0 && string.IsNullOrWhiteSpace(it.ProdutoNome) && prods.TryGetValue(it.ProdutoId.Value, out var nome))
                         it.ProdutoNome = nome;
                 }
             }
@@ -304,13 +308,17 @@ namespace ApiECommerce.Controllers
                 }
             }
 
-            var idsToFetch = items.Where(i => (i.ProdutoId > 0) && string.IsNullOrWhiteSpace(i.ProdutoNome)).Select(i => i.ProdutoId).Distinct().ToList();
+            var idsToFetch = items
+                .Where(i => i.ProdutoId.HasValue && i.ProdutoId.Value > 0 && string.IsNullOrWhiteSpace(i.ProdutoNome))
+                .Select(i => i.ProdutoId.Value)
+                .Distinct()
+                .ToList();
             if (idsToFetch.Any())
             {
                 var prods = await _context.Produtos.Where(p => idsToFetch.Contains(p.Id)).ToDictionaryAsync(p => p.Id, p => p.Nome);
                 foreach (var it in items)
                 {
-                    if (it.ProdutoId > 0 && string.IsNullOrWhiteSpace(it.ProdutoNome) && prods.TryGetValue(it.ProdutoId, out var nome))
+                    if (it.ProdutoId.HasValue && it.ProdutoId.Value > 0 && string.IsNullOrWhiteSpace(it.ProdutoNome) && prods.TryGetValue(it.ProdutoId.Value, out var nome))
                         it.ProdutoNome = nome;
                 }
             }

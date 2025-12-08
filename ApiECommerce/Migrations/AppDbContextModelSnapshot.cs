@@ -402,8 +402,11 @@ namespace ApiECommerce.Migrations
                     b.Property<decimal>("Preco")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<int>("ProdutoId")
+                    b.Property<int?>("ProdutoId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ProdutoNome")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Quantidade")
                         .HasColumnType("int");
@@ -702,6 +705,12 @@ namespace ApiECommerce.Migrations
                     b.Property<int?>("ClientesId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("DataPagamentoPrazo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DataPagamentoPrazo2")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("DataPedido")
                         .HasColumnType("datetime2");
 
@@ -713,6 +722,9 @@ namespace ApiECommerce.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FormaPagamento2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Observacoes")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
@@ -781,8 +793,30 @@ namespace ApiECommerce.Migrations
                     b.Property<bool>("Popular")
                         .HasColumnType("bit");
 
-                    b.Property<decimal>("Preco")
-                        .HasColumnType("decimal(10,2)");
+                    b.Property<decimal>("PrecoCusto")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(10,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<decimal>("PrecoEntrega")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(10,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<decimal>("PrecoGelada")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(10,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<decimal>("PrecoQuente")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(10,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<decimal>("PrecoRetirar")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(10,2)")
+                        .HasDefaultValue(0m);
 
                     b.Property<string>("UrlImagem")
                         .HasMaxLength(200)
@@ -805,7 +839,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CERVEJA ORIGINAL LATA 350ML",
                             Popular = true,
-                            Preco = 4.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 4.99m,
+                            PrecoGelada = 4.99m,
+                            PrecoQuente = 4.99m,
+                            PrecoRetirar = 4.99m,
                             UrlImagem = "cervejaoriginallata350ml.jpg"
                         },
                         new
@@ -818,7 +856,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "BARRIGUDINHA ORGINAL 300ml",
                             Popular = true,
-                            Preco = 3.80m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 3.80m,
+                            PrecoGelada = 3.80m,
+                            PrecoQuente = 3.80m,
+                            PrecoRetirar = 3.80m,
                             UrlImagem = "barrigudinhaorginal300ml.jpg"
                         },
                         new
@@ -831,7 +873,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "BARRIGUDINHA SKOL 300 ml",
                             Popular = true,
-                            Preco = 2.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 2.99m,
+                            PrecoGelada = 2.99m,
+                            PrecoQuente = 2.99m,
+                            PrecoRetirar = 2.99m,
                             UrlImagem = "barrigudinhaskol300ml.jpg"
                         },
                         new
@@ -844,7 +890,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "BARRIGUDINHA BRAHMA 300ml",
                             Popular = true,
-                            Preco = 2.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 2.99m,
+                            PrecoGelada = 2.99m,
+                            PrecoQuente = 2.99m,
+                            PrecoRetirar = 2.99m,
                             UrlImagem = "barrigudinhabrahma300ml.jpg"
                         },
                         new
@@ -857,7 +907,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CRISTAL LATA 350ml",
                             Popular = true,
-                            Preco = 2.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 2.99m,
+                            PrecoGelada = 2.99m,
+                            PrecoQuente = 2.99m,
+                            PrecoRetirar = 2.99m,
                             UrlImagem = "cristallata350ml.jpg"
                         },
                         new
@@ -870,7 +924,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "XERETA SABORES 2l",
                             Popular = true,
-                            Preco = 5.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 5.99m,
+                            PrecoGelada = 5.99m,
+                            PrecoQuente = 5.99m,
+                            PrecoRetirar = 5.99m,
                             UrlImagem = "xeretasabores2l.jpg"
                         },
                         new
@@ -883,7 +941,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "COCA COLA 2l RET",
                             Popular = true,
-                            Preco = 8.49m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 8.49m,
+                            PrecoGelada = 8.49m,
+                            PrecoQuente = 8.49m,
+                            PrecoRetirar = 8.49m,
                             UrlImagem = "cocacola2lret.jpg"
                         },
                         new
@@ -896,7 +958,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "COCA COLA 2L PET",
                             Popular = true,
-                            Preco = 13.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 13.99m,
+                            PrecoGelada = 13.99m,
+                            PrecoQuente = 13.99m,
+                            PrecoRetirar = 13.99m,
                             UrlImagem = "cocacola2lpet.jpg"
                         },
                         new
@@ -909,7 +975,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "COCA COLA 350ML LATA",
                             Popular = true,
-                            Preco = 4.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.99m,
                             UrlImagem = "cocacola350mllata.jpg"
                         },
                         new
@@ -922,7 +992,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "COCA COLA 200ML GARR",
                             Popular = true,
-                            Preco = 2.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 2.50m,
                             UrlImagem = "cocacola200mlgarr.jpg"
                         },
                         new
@@ -935,7 +1009,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "COCA COLA KS",
                             Popular = true,
-                            Preco = 4.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.50m,
                             UrlImagem = "cocacolaks.jpg"
                         },
                         new
@@ -948,7 +1026,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "TAMPICO 450ML",
                             Popular = true,
-                            Preco = 4.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.99m,
                             UrlImagem = "tampico450ml.jpg"
                         },
                         new
@@ -961,7 +1043,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "TAMPICO 2L",
                             Popular = true,
-                            Preco = 11.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 11.99m,
                             UrlImagem = "tampico2l.jpg"
                         },
                         new
@@ -974,7 +1060,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "TAMPICO 270ML LATA UVA",
                             Popular = true,
-                            Preco = 3.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.99m,
                             UrlImagem = "tampico270mllatauva.jpg"
                         },
                         new
@@ -987,7 +1077,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "TAMPICO 270ML LATA LARANJA",
                             Popular = true,
-                            Preco = 3.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.99m,
                             UrlImagem = "tampico270mllatalaranja.jpg"
                         },
                         new
@@ -1000,7 +1094,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "DEL VALLE 290ML PESSÊGO",
                             Popular = true,
-                            Preco = 4.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.99m,
                             UrlImagem = "delvalle290mlpessêgo.jpg"
                         },
                         new
@@ -1013,7 +1111,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "DEL VALLE 290ML MANGA",
                             Popular = true,
-                            Preco = 4.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.99m,
                             UrlImagem = "delvalle290mlmanga.jpg"
                         },
                         new
@@ -1026,7 +1128,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "DEL VALLE 290ML GOIABA",
                             Popular = true,
-                            Preco = 4.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.99m,
                             UrlImagem = "delvalle290mlgoiaba.jpg"
                         },
                         new
@@ -1039,7 +1145,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "MONSTER 473ML GUARANÁ LATA",
                             Popular = true,
-                            Preco = 11.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 11.50m,
                             UrlImagem = "monster473mlguaranálata.jpg"
                         },
                         new
@@ -1052,7 +1162,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "MONSTER 437ML MANGO LATA",
                             Popular = true,
-                            Preco = 11.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 11.50m,
                             UrlImagem = "monster437mlmangolata.jpg"
                         },
                         new
@@ -1065,7 +1179,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "TNT 437ML LATA",
                             Popular = true,
-                            Preco = 10.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.99m,
                             UrlImagem = "tnt437mllata.jpg"
                         },
                         new
@@ -1078,7 +1196,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CERVEJA IMPERIO LATA 350ml",
                             Popular = true,
-                            Preco = 3.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.99m,
                             UrlImagem = "cervejaimperiolata350ml.jpg"
                         },
                         new
@@ -1091,7 +1213,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "HEINEKEN LONGE NECK 330ml",
                             Popular = true,
-                            Preco = 7.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 7.99m,
                             UrlImagem = "heinekenlongeneck330ml.jpg"
                         },
                         new
@@ -1104,7 +1230,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ORIGINAL GARRAFA 600 ml",
                             Popular = true,
-                            Preco = 10.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.00m,
                             UrlImagem = "originalgarrafa600ml.jpg"
                         },
                         new
@@ -1117,7 +1247,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CERVEJA HEINEKEM 600 ml",
                             Popular = true,
-                            Preco = 0.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 0.00m,
                             UrlImagem = "cervejaheinekem600ml.jpg"
                         },
                         new
@@ -1130,7 +1264,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ICE LEEV 275ml",
                             Popular = true,
-                            Preco = 6.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 6.99m,
                             UrlImagem = "iceleev275ml.jpg"
                         },
                         new
@@ -1143,7 +1281,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CABARE ICE 275ml",
                             Popular = true,
-                            Preco = 7.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 7.99m,
                             UrlImagem = "cabareice275ml.jpg"
                         },
                         new
@@ -1156,7 +1298,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CERVEJA AMSTEL 355 ML",
                             Popular = true,
-                            Preco = 3.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.99m,
                             UrlImagem = "cervejaamstel355ml.jpg"
                         },
                         new
@@ -1169,7 +1315,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CERVEJA ITAIPAVA MALZERBIER 330ml",
                             Popular = true,
-                            Preco = 6.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 6.00m,
                             UrlImagem = "cervejaitaipavamalzerbier330ml.jpg"
                         },
                         new
@@ -1182,7 +1332,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ICE ASKOV 275 ml",
                             Popular = true,
-                            Preco = 6.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 6.99m,
                             UrlImagem = "iceaskov275ml.jpg"
                         },
                         new
@@ -1195,7 +1349,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ENERGICO BALY 2l DIVERSOS",
                             Popular = true,
-                            Preco = 10.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.99m,
                             UrlImagem = "energicobaly2ldiversos.jpg"
                         },
                         new
@@ -1208,7 +1366,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CERVEJA ITAIPAVA ZERO 330 ml",
                             Popular = true,
-                            Preco = 4.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.50m,
                             UrlImagem = "cervejaitaipavazero330ml.jpg"
                         },
                         new
@@ -1221,7 +1383,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CIGARRO SAMARINO",
                             Popular = true,
-                            Preco = 6.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 6.00m,
                             UrlImagem = "cigarrosamarino.jpg"
                         },
                         new
@@ -1234,7 +1400,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CIGARRO EGYPT",
                             Popular = true,
-                            Preco = 6.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 6.50m,
                             UrlImagem = "cigarroegypt.jpg"
                         },
                         new
@@ -1247,7 +1417,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CIGARRO CHESTERFILD BRANCO",
                             Popular = true,
-                            Preco = 10.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.50m,
                             UrlImagem = "cigarrochesterfildbranco.jpg"
                         },
                         new
@@ -1260,7 +1434,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CIGARRO MALBORO",
                             Popular = true,
-                            Preco = 14.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 14.50m,
                             UrlImagem = "cigarromalboro.jpg"
                         },
                         new
@@ -1273,7 +1451,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PALHEIRO BLUE ICE",
                             Popular = true,
-                            Preco = 8.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 8.00m,
                             UrlImagem = "palheiroblueice.jpg"
                         },
                         new
@@ -1286,7 +1468,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PALHEIRO TOMBADA MENTa",
                             Popular = true,
-                            Preco = 8.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 8.00m,
                             UrlImagem = "palheirotombadamenta.jpg"
                         },
                         new
@@ -1299,7 +1485,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PALHEIRO TRADICIONAL",
                             Popular = true,
-                            Preco = 8.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 8.00m,
                             UrlImagem = "palheirotradicional.jpg"
                         },
                         new
@@ -1312,7 +1502,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "SEDA ZOMO",
                             Popular = true,
-                            Preco = 4.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.00m,
                             UrlImagem = "sedazomo.jpg"
                         },
                         new
@@ -1325,7 +1519,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "DON TABACCO BREZE",
                             Popular = true,
-                            Preco = 15.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 15.00m,
                             UrlImagem = "dontabaccobreze.jpg"
                         },
                         new
@@ -1338,7 +1536,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "TRITURADOR.",
                             Popular = true,
-                            Preco = 0.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 0.00m,
                             UrlImagem = "triturador..jpg"
                         },
                         new
@@ -1351,7 +1553,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "AGUA TONICA 350ml",
                             Popular = true,
-                            Preco = 4.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.99m,
                             UrlImagem = "aguatonica350ml.jpg"
                         },
                         new
@@ -1364,7 +1570,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CERVEJA AMISTEL 350 LATA",
                             Popular = true,
-                            Preco = 5.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 5.00m,
                             UrlImagem = "cervejaamistel350lata.jpg"
                         },
                         new
@@ -1377,7 +1587,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ATOMIC ENERG 270ML LATA",
                             Popular = true,
-                            Preco = 0.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 0.00m,
                             UrlImagem = "atomicenerg270mllata.jpg"
                         },
                         new
@@ -1390,7 +1604,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "SCHWEPPERS MIXED GIN TONICA PINK 269ML",
                             Popular = true,
-                            Preco = 5.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 5.00m,
                             UrlImagem = "schweppersmixedgintonicapink269ml.jpg"
                         },
                         new
@@ -1403,7 +1621,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CERVEJA AMSTEL 269ML LATA",
                             Popular = true,
-                            Preco = 2.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 2.99m,
                             UrlImagem = "cervejaamstel269mllata.jpg"
                         },
                         new
@@ -1416,7 +1638,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "COCA COLA KS ZERO",
                             Popular = true,
-                            Preco = 4.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.50m,
                             UrlImagem = "cocacolakszero.jpg"
                         },
                         new
@@ -1429,7 +1655,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "GATORADE SABOR UVA 500ml",
                             Popular = true,
-                            Preco = 7.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 7.99m,
                             UrlImagem = "gatoradesaboruva500ml.jpg"
                         },
                         new
@@ -1442,7 +1672,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ISQUEIRO TRANPARESTE",
                             Popular = true,
-                            Preco = 3.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.00m,
                             UrlImagem = "isqueirotranpareste.jpg"
                         },
                         new
@@ -1455,7 +1689,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ENERGICO FLYING HORSE",
                             Popular = true,
-                            Preco = 7.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 7.99m,
                             UrlImagem = "energicoflyinghorse.jpg"
                         },
                         new
@@ -1468,7 +1706,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "FANTA LARANJA 350ML LATA",
                             Popular = true,
-                            Preco = 4.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.99m,
                             UrlImagem = "fantalaranja350mllata.jpg"
                         },
                         new
@@ -1481,7 +1723,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "GUARANA ANTARCTICA LATA 350 ml",
                             Popular = true,
-                            Preco = 5.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 5.00m,
                             UrlImagem = "guaranaantarcticalata350ml.jpg"
                         },
                         new
@@ -1494,7 +1740,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ITUBAINA ORGIANAL LATA 350ml",
                             Popular = true,
-                            Preco = 5.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 5.00m,
                             UrlImagem = "itubainaorgianallata350ml.jpg"
                         },
                         new
@@ -1507,7 +1757,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "SCHWEPPES 350ML LATA",
                             Popular = true,
-                            Preco = 4.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.99m,
                             UrlImagem = "schweppes350mllata.jpg"
                         },
                         new
@@ -1520,7 +1774,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "HEINEKEN LONGE NECK 250 ml",
                             Popular = true,
-                            Preco = 5.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 5.00m,
                             UrlImagem = "heinekenlongeneck250ml.jpg"
                         },
                         new
@@ -1533,7 +1791,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "HENEKEN ZERO LONGE NECK 330 ml",
                             Popular = true,
-                            Preco = 0.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 0.00m,
                             UrlImagem = "henekenzerolongeneck330ml.jpg"
                         },
                         new
@@ -1546,7 +1808,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "TORCIDA SABORES",
                             Popular = true,
-                            Preco = 3.49m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.49m,
                             UrlImagem = "torcidasabores.jpg"
                         },
                         new
@@ -1559,7 +1825,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "FABITOS SABORESN 80gm",
                             Popular = true,
-                            Preco = 2.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 2.50m,
                             UrlImagem = "fabitossaboresn80gm.jpg"
                         },
                         new
@@ -1572,7 +1842,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "BISCOITIO DE POLVILHO 100gm",
                             Popular = true,
-                            Preco = 5.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 5.50m,
                             UrlImagem = "biscoitiodepolvilho100gm.jpg"
                         },
                         new
@@ -1585,7 +1859,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "GUANA ANTARTICA 350ml LATA",
                             Popular = true,
-                            Preco = 0.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 0.00m,
                             UrlImagem = "guanaantartica350mllata.jpg"
                         },
                         new
@@ -1598,7 +1876,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "GUANA ANTARTICA 200ml GARRAFA",
                             Popular = true,
-                            Preco = 0.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 0.00m,
                             UrlImagem = "guanaantartica200mlgarrafa.jpg"
                         },
                         new
@@ -1611,7 +1893,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "SPRITE 350 ml LATA",
                             Popular = true,
-                            Preco = 5.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 5.00m,
                             UrlImagem = "sprite350mllata.jpg"
                         },
                         new
@@ -1624,7 +1910,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "HEINEKEN 350ml",
                             Popular = true,
-                            Preco = 5.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 5.99m,
                             UrlImagem = "heineken350ml.jpg"
                         },
                         new
@@ -1637,7 +1927,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "DOSE SEM LIMAO",
                             Popular = true,
-                            Preco = 4.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.00m,
                             UrlImagem = "dosesemlimao.jpg"
                         },
                         new
@@ -1650,7 +1944,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "DOSE COM LIMAO",
                             Popular = true,
-                            Preco = 5.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 5.00m,
                             UrlImagem = "dosecomlimao.jpg"
                         },
                         new
@@ -1663,7 +1961,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "DOSE JAMEL COM PARATUDO",
                             Popular = true,
-                            Preco = 6.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 6.00m,
                             UrlImagem = "dosejamelcomparatudo.jpg"
                         },
                         new
@@ -1676,7 +1978,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "DESE JURUBEBA",
                             Popular = true,
-                            Preco = 3.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.00m,
                             UrlImagem = "desejurubeba.jpg"
                         },
                         new
@@ -1689,7 +1995,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "AGUA 510ml",
                             Popular = true,
-                            Preco = 2.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 2.99m,
                             UrlImagem = "agua510ml.jpg"
                         },
                         new
@@ -1702,7 +2012,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "AGUA COM GAS 510ml",
                             Popular = true,
-                            Preco = 3.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.99m,
                             UrlImagem = "aguacomgas510ml.jpg"
                         },
                         new
@@ -1715,7 +2029,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CARVAO TARTARUGAO 2KG",
                             Popular = true,
-                            Preco = 14.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 14.99m,
                             UrlImagem = "carvaotartarugao2kg.jpg"
                         },
                         new
@@ -1728,7 +2046,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CARTVAO TARTARUGAO 4KG",
                             Popular = true,
-                            Preco = 0.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 0.00m,
                             UrlImagem = "cartvaotartarugao4kg.jpg"
                         },
                         new
@@ -1741,7 +2063,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PAÇOCAO",
                             Popular = true,
-                            Preco = 0.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 0.00m,
                             UrlImagem = "paçocao.jpg"
                         },
                         new
@@ -1754,7 +2080,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PAÇOCA ROLHA",
                             Popular = true,
-                            Preco = 0.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 0.00m,
                             UrlImagem = "paçocarolha.jpg"
                         },
                         new
@@ -1767,7 +2097,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "HEINEKEN 600ml",
                             Popular = true,
-                            Preco = 14.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 14.99m,
                             UrlImagem = "heineken600ml.jpg"
                         },
                         new
@@ -1780,7 +2114,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "EISENBAHM 600ml",
                             Popular = true,
-                            Preco = 6.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 6.00m,
                             UrlImagem = "eisenbahm600ml.jpg"
                         },
                         new
@@ -1793,7 +2131,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "FANTA UVA 350ml LATA",
                             Popular = true,
-                            Preco = 5.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 5.00m,
                             UrlImagem = "fantauva350mllata.jpg"
                         },
                         new
@@ -1806,7 +2148,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "EISENBAHN 350ml",
                             Popular = true,
-                            Preco = 3.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.99m,
                             UrlImagem = "eisenbahn350ml.jpg"
                         },
                         new
@@ -1819,7 +2165,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "HENEKEN ZERO LONGE NECK 330 ml",
                             Popular = true,
-                            Preco = 7.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 7.99m,
                             UrlImagem = "henekenzerolongeneck330ml.jpg"
                         },
                         new
@@ -1832,7 +2182,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CORONA",
                             Popular = true,
-                            Preco = 7.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 7.99m,
                             UrlImagem = "corona.jpg"
                         },
                         new
@@ -1845,7 +2199,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CERVEJA STELLA LONGE NECK 330ml",
                             Popular = true,
-                            Preco = 7.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 7.99m,
                             UrlImagem = "cervejastellalongeneck330ml.jpg"
                         },
                         new
@@ -1858,7 +2216,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "HEINEKEN LATA 269 ml",
                             Popular = true,
-                            Preco = 4.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.50m,
                             UrlImagem = "heinekenlata269ml.jpg"
                         },
                         new
@@ -1871,7 +2233,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "TNT ORINAL",
                             Popular = true,
-                            Preco = 9.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 9.99m,
                             UrlImagem = "tntorinal.jpg"
                         },
                         new
@@ -1884,7 +2250,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ATOMIC ENERGICO",
                             Popular = true,
-                            Preco = 5.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 5.00m,
                             UrlImagem = "atomicenergico.jpg"
                         },
                         new
@@ -1897,7 +2267,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "VINHO CHAPINHA",
                             Popular = true,
-                            Preco = 19.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 19.99m,
                             UrlImagem = "vinhochapinha.jpg"
                         },
                         new
@@ -1910,7 +2284,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "COPÂO DE WISKY",
                             Popular = true,
-                            Preco = 15.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 15.00m,
                             UrlImagem = "copâodewisky.jpg"
                         },
                         new
@@ -1923,7 +2301,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "GELO PACOTE 2KG",
                             Popular = true,
-                            Preco = 7.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 7.99m,
                             UrlImagem = "gelopacote2kg.jpg"
                         },
                         new
@@ -1936,7 +2318,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "GELO SACO 5KG",
                             Popular = true,
-                            Preco = 10.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.99m,
                             UrlImagem = "gelosaco5kg.jpg"
                         },
                         new
@@ -1949,7 +2335,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "GELO DE COCO",
                             Popular = true,
-                            Preco = 3.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.00m,
                             UrlImagem = "gelodecoco.jpg"
                         },
                         new
@@ -1962,7 +2352,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "GELO DE COCO MORANGO",
                             Popular = true,
-                            Preco = 3.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.00m,
                             UrlImagem = "gelodecocomorango.jpg"
                         },
                         new
@@ -1975,7 +2369,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "GELO DE COCO MARUCAJA",
                             Popular = true,
-                            Preco = 3.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.00m,
                             UrlImagem = "gelodecocomarucaja.jpg"
                         },
                         new
@@ -1988,7 +2386,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "GELO DE COCO MELANCIA",
                             Popular = true,
-                            Preco = 3.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.00m,
                             UrlImagem = "gelodecocomelancia.jpg"
                         },
                         new
@@ -2001,7 +2403,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "NUSAQUINH IORDUT DE MORANGO",
                             Popular = true,
-                            Preco = 18.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 18.00m,
                             UrlImagem = "nusaquinhiordutdemorango.jpg"
                         },
                         new
@@ -2014,7 +2420,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ASKOV LIMÂO 900ml",
                             Popular = true,
-                            Preco = 19.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 19.99m,
                             UrlImagem = "askovlimâo900ml.jpg"
                         },
                         new
@@ -2027,7 +2437,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ASKOV KIWI 900ml",
                             Popular = true,
-                            Preco = 0.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 0.00m,
                             UrlImagem = "askovkiwi900ml.jpg"
                         },
                         new
@@ -2040,7 +2454,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ASKOV MARACUJÀ 900ml",
                             Popular = true,
-                            Preco = 0.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 0.00m,
                             UrlImagem = "askovmaracujà900ml.jpg"
                         },
                         new
@@ -2053,7 +2471,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ASKOV BLUEBERRY 900ml",
                             Popular = true,
-                            Preco = 0.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 0.00m,
                             UrlImagem = "askovblueberry900ml.jpg"
                         },
                         new
@@ -2066,7 +2488,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ASKOV VODKA 900ml",
                             Popular = true,
-                            Preco = 0.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 0.00m,
                             UrlImagem = "askovvodka900ml.jpg"
                         },
                         new
@@ -2079,7 +2505,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ASKOV FRUTAS ROXAS 900ml",
                             Popular = true,
-                            Preco = 0.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 0.00m,
                             UrlImagem = "askovfrutasroxas900ml.jpg"
                         },
                         new
@@ -2092,7 +2522,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ETERNITY GIN TROPICAL FRUTS 900ml",
                             Popular = true,
-                            Preco = 23.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 23.99m,
                             UrlImagem = "eternitygintropicalfruts900ml.jpg"
                         },
                         new
@@ -2105,7 +2539,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ETERNITY GIN MAÇÂ VERDE 900ml",
                             Popular = true,
-                            Preco = 23.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 23.99m,
                             UrlImagem = "eternityginmaçâverde900ml.jpg"
                         },
                         new
@@ -2118,7 +2556,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ETERNITY GIN WATERMWLON 900ml",
                             Popular = true,
-                            Preco = 23.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 23.99m,
                             UrlImagem = "eternityginwatermwlon900ml.jpg"
                         },
                         new
@@ -2131,7 +2573,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ETERNITY GIN STRAWBERRY 900ml",
                             Popular = true,
-                            Preco = 23.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 23.99m,
                             UrlImagem = "eternityginstrawberry900ml.jpg"
                         },
                         new
@@ -2144,7 +2590,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "MANSAO MAROMBA WHISK+COMBO",
                             Popular = true,
-                            Preco = 13.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 13.99m,
                             UrlImagem = "mansaomarombawhisk+combo.jpg"
                         },
                         new
@@ -2157,7 +2607,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "MANSAO MAROMBA VODKA+CAFEINA",
                             Popular = true,
-                            Preco = 13.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 13.99m,
                             UrlImagem = "mansaomarombavodka+cafeina.jpg"
                         },
                         new
@@ -2170,7 +2624,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "MANSAO MAROMBA MACA VERDE",
                             Popular = true,
-                            Preco = 13.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 13.99m,
                             UrlImagem = "mansaomarombamacaverde.jpg"
                         },
                         new
@@ -2183,7 +2641,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "MANSAO MAROMBA WHISKY+COCONUT",
                             Popular = true,
-                            Preco = 13.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 13.99m,
                             UrlImagem = "mansaomarombawhisky+coconut.jpg"
                         },
                         new
@@ -2196,7 +2658,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "MANSAO MAROMBA MELANCIA",
                             Popular = true,
-                            Preco = 13.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 13.99m,
                             UrlImagem = "mansaomarombamelancia.jpg"
                         },
                         new
@@ -2209,7 +2675,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CERVEJA ITAIPAVA ZERO 330 ml",
                             Popular = true,
-                            Preco = 4.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.50m,
                             UrlImagem = "cervejaitaipavazero330ml.jpg"
                         },
                         new
@@ -2222,7 +2692,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CERVEJA AMSTEL 600ML",
                             Popular = true,
-                            Preco = 9.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 9.99m,
                             UrlImagem = "cervejaamstel600ml.jpg"
                         },
                         new
@@ -2235,7 +2709,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "BAIANINHA AMENDOIN 900",
                             Popular = true,
-                            Preco = 18.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 18.99m,
                             UrlImagem = "baianinhaamendoin900.jpg"
                         },
                         new
@@ -2248,7 +2726,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "SAO BERNADO 475ML",
                             Popular = true,
-                            Preco = 3.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.99m,
                             UrlImagem = "saobernado475ml.jpg"
                         },
                         new
@@ -2261,7 +2743,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "COROTE JAPIRA 500ML",
                             Popular = true,
-                            Preco = 3.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.99m,
                             UrlImagem = "corotejapira500ml.jpg"
                         },
                         new
@@ -2274,7 +2760,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ROTHMANS AZUL",
                             Popular = true,
-                            Preco = 8.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 8.50m,
                             UrlImagem = "rothmansazul.jpg"
                         },
                         new
@@ -2287,7 +2777,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ROTHMANS AZUL",
                             Popular = true,
-                            Preco = 8.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 8.50m,
                             UrlImagem = "rothmansazul.jpg"
                         },
                         new
@@ -2300,7 +2794,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PALHEIRO UNIVERSITARIO MENTA",
                             Popular = true,
-                            Preco = 8.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 8.00m,
                             UrlImagem = "palheirouniversitariomenta.jpg"
                         },
                         new
@@ -2313,7 +2811,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CARVAO TARTARUGAO 5KG",
                             Popular = true,
-                            Preco = 27.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 27.99m,
                             UrlImagem = "carvaotartarugao5kg.jpg"
                         },
                         new
@@ -2326,7 +2828,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "SKOL LITRAO 1L",
                             Popular = true,
-                            Preco = 11.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 11.99m,
                             UrlImagem = "skollitrao1l.jpg"
                         },
                         new
@@ -2339,7 +2845,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "DEL VALLE MARACUJÁ 1L",
                             Popular = true,
-                            Preco = 10.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.99m,
                             UrlImagem = "delvallemaracujá1l.jpg"
                         },
                         new
@@ -2352,7 +2862,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "COPÃO JACK DANIELS / WHITE HOURSE",
                             Popular = true,
-                            Preco = 25.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 25.00m,
                             UrlImagem = "copãojackdaniels/whitehourse.jpg"
                         },
                         new
@@ -2365,7 +2879,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "COPAO RED LABEL",
                             Popular = true,
-                            Preco = 16.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 16.00m,
                             UrlImagem = "copaoredlabel.jpg"
                         },
                         new
@@ -2378,7 +2896,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "COMBO PASSAPORTE / GYM / VODKA",
                             Popular = true,
-                            Preco = 10.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.00m,
                             UrlImagem = "combopassaporte/gym/vodka.jpg"
                         },
                         new
@@ -2391,7 +2913,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CIGARRO SOLTO CHESTERFIELD / ROTHMANS",
                             Popular = true,
-                            Preco = 0.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 0.50m,
                             UrlImagem = "cigarrosoltochesterfield/rothmans.jpg"
                         },
                         new
@@ -2404,7 +2930,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CHOP VINHO DRAFT",
                             Popular = true,
-                            Preco = 16.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 16.00m,
                             UrlImagem = "chopvinhodraft.jpg"
                         },
                         new
@@ -2417,7 +2947,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "HEINEKEN ZERO LONG 330ml",
                             Popular = true,
-                            Preco = 6.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 6.99m,
                             UrlImagem = "heinekenzerolong330ml.jpg"
                         },
                         new
@@ -2430,7 +2964,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ESPETO DE CARNE",
                             Popular = true,
-                            Preco = 49.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 49.99m,
                             UrlImagem = "espetodecarne.jpg"
                         },
                         new
@@ -2443,7 +2981,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "BUDWEISER LATA 350ML",
                             Popular = true,
-                            Preco = 4.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.50m,
                             UrlImagem = "budweiserlata350ml.jpg"
                         },
                         new
@@ -2456,7 +2998,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "COCA COLA 600ML",
                             Popular = true,
-                            Preco = 5.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 5.99m,
                             UrlImagem = "cocacola600ml.jpg"
                         },
                         new
@@ -2469,7 +3015,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "COCA COLA 1L",
                             Popular = true,
-                            Preco = 4.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.99m,
                             UrlImagem = "cocacola1l.jpg"
                         },
                         new
@@ -2482,7 +3032,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "JACK DANIEILS",
                             Popular = true,
-                            Preco = 10.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.00m,
                             UrlImagem = "jackdanieils.jpg"
                         },
                         new
@@ -2495,7 +3049,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CERVEJA ANTARCTICA",
                             Popular = true,
-                            Preco = 3.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.00m,
                             UrlImagem = "cervejaantarctica.jpg"
                         },
                         new
@@ -2508,7 +3066,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PETRA BARRIGUDINHA",
                             Popular = true,
-                            Preco = 3.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.00m,
                             UrlImagem = "petrabarrigudinha.jpg"
                         },
                         new
@@ -2521,7 +3083,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ENERGICO MONSTER MELON",
                             Popular = true,
-                            Preco = 11.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 11.50m,
                             UrlImagem = "energicomonstermelon.jpg"
                         },
                         new
@@ -2534,7 +3100,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ENERGICO MOSTER PARADISE",
                             Popular = true,
-                            Preco = 10.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.99m,
                             UrlImagem = "energicomosterparadise.jpg"
                         },
                         new
@@ -2547,7 +3117,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CERVEJA PETRA LATA 350ML",
                             Popular = true,
-                            Preco = 3.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.50m,
                             UrlImagem = "cervejapetralata350ml.jpg"
                         },
                         new
@@ -2560,7 +3134,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "RED BULL 250ML",
                             Popular = true,
-                            Preco = 9.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 9.99m,
                             UrlImagem = "redbull250ml.jpg"
                         },
                         new
@@ -2573,7 +3151,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CERVEJA ITAIPAVA LATA 350 ML",
                             Popular = true,
-                            Preco = 3.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.50m,
                             UrlImagem = "cervejaitaipavalata350ml.jpg"
                         },
                         new
@@ -2586,7 +3168,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ESPETO SABORES",
                             Popular = true,
-                            Preco = 8.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 8.00m,
                             UrlImagem = "espetosabores.jpg"
                         },
                         new
@@ -2599,7 +3185,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ESPETO CAFITA",
                             Popular = true,
-                            Preco = 10.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.00m,
                             UrlImagem = "espetocafita.jpg"
                         },
                         new
@@ -2612,7 +3202,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CHICLETE",
                             Popular = true,
-                            Preco = 0.15m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 0.15m,
                             UrlImagem = "chiclete.jpg"
                         },
                         new
@@ -2625,7 +3219,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CHOQUITO",
                             Popular = true,
-                            Preco = 2.80m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 2.80m,
                             UrlImagem = "choquito.jpg"
                         },
                         new
@@ -2638,7 +3236,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ITUBAINA ORIGINAL 600ML",
                             Popular = true,
-                            Preco = 4.49m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.49m,
                             UrlImagem = "itubainaoriginal600ml.jpg"
                         },
                         new
@@ -2651,7 +3253,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ITUBAINA ORIGINAL LONG 355ML",
                             Popular = true,
-                            Preco = 5.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 5.99m,
                             UrlImagem = "itubainaoriginallong355ml.jpg"
                         },
                         new
@@ -2664,7 +3270,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "FRITISCO BATATA 40gm",
                             Popular = true,
-                            Preco = 3.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.00m,
                             UrlImagem = "fritiscobatata40gm.jpg"
                         },
                         new
@@ -2677,7 +3287,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "TRIDENT",
                             Popular = true,
-                            Preco = 2.69m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 2.69m,
                             UrlImagem = "trident.jpg"
                         },
                         new
@@ -2690,7 +3304,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PRESTIGIO",
                             Popular = true,
-                            Preco = 2.79m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 2.79m,
                             UrlImagem = "prestigio.jpg"
                         },
                         new
@@ -2703,7 +3321,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "FILTRO ALEDA 150 UNIDADES",
                             Popular = true,
-                            Preco = 6.59m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 6.59m,
                             UrlImagem = "filtroaleda150unidades.jpg"
                         },
                         new
@@ -2716,7 +3338,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "TABACO ACREMA BLEND 20g",
                             Popular = true,
-                            Preco = 17.49m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 17.49m,
                             UrlImagem = "tabacoacremablend20g.jpg"
                         },
                         new
@@ -2729,7 +3355,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CIGARRO WINSTON SABOR",
                             Popular = true,
-                            Preco = 12.49m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 12.49m,
                             UrlImagem = "cigarrowinstonsabor.jpg"
                         },
                         new
@@ -2742,7 +3372,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CIGARRO WINSTON SELECTED RED",
                             Popular = true,
-                            Preco = 11.49m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 11.49m,
                             UrlImagem = "cigarrowinstonselectedred.jpg"
                         },
                         new
@@ -2755,7 +3389,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PORÇÃO DE BATATA 300gm",
                             Popular = true,
-                            Preco = 15.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 15.00m,
                             UrlImagem = "porçãodebatata300gm.jpg"
                         },
                         new
@@ -2768,7 +3406,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PORÇÃO DE BATATA 500gm",
                             Popular = true,
-                            Preco = 25.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 25.00m,
                             UrlImagem = "porçãodebatata500gm.jpg"
                         },
                         new
@@ -2781,7 +3423,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PORÇÃO DE TORRESMO 300gm",
                             Popular = true,
-                            Preco = 25.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 25.00m,
                             UrlImagem = "porçãodetorresmo300gm.jpg"
                         },
                         new
@@ -2794,7 +3440,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PORÇÃO DE TORRESMO 500gm",
                             Popular = true,
-                            Preco = 35.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 35.00m,
                             UrlImagem = "porçãodetorresmo500gm.jpg"
                         },
                         new
@@ -2807,7 +3457,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PORÇÃO DE CALABRESA 300gm",
                             Popular = true,
-                            Preco = 20.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 20.00m,
                             UrlImagem = "porçãodecalabresa300gm.jpg"
                         },
                         new
@@ -2820,7 +3474,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PORÇÃO DE CALABRESA 500gm",
                             Popular = true,
-                            Preco = 35.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 35.00m,
                             UrlImagem = "porçãodecalabresa500gm.jpg"
                         },
                         new
@@ -2833,7 +3491,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PORÇÃO DE TULIPA 300gm",
                             Popular = true,
-                            Preco = 25.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 25.00m,
                             UrlImagem = "porçãodetulipa300gm.jpg"
                         },
                         new
@@ -2846,7 +3508,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PORÇÃO DE ISCA DE TILAPIA 300gm",
                             Popular = true,
-                            Preco = 35.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 35.00m,
                             UrlImagem = "porçãodeiscadetilapia300gm.jpg"
                         },
                         new
@@ -2859,7 +3525,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PORÇÃO DE ISCA DE TILAPIA 500gm",
                             Popular = true,
-                            Preco = 50.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 50.00m,
                             UrlImagem = "porçãodeiscadetilapia500gm.jpg"
                         },
                         new
@@ -2872,7 +3542,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PASTEL CARNE / QUEIJO / PIZZA",
                             Popular = true,
-                            Preco = 10.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.00m,
                             UrlImagem = "pastelcarne/queijo/pizza.jpg"
                         },
                         new
@@ -2885,7 +3559,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PASTEL DE FRANGO COM CATUPIRY / CARNE COM QUEIJO",
                             Popular = true,
-                            Preco = 12.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 12.00m,
                             UrlImagem = "pasteldefrangocomcatupiry/carnecomqueijo.jpg"
                         },
                         new
@@ -2898,7 +3576,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "AGUA COM GAS MINALBA 1,5L",
                             Popular = true,
-                            Preco = 5.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 5.99m,
                             UrlImagem = "aguacomgasminalba1,5l.jpg"
                         },
                         new
@@ -2911,7 +3593,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "SALGADO",
                             Popular = true,
-                            Preco = 8.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 8.00m,
                             UrlImagem = "salgado.jpg"
                         },
                         new
@@ -2924,7 +3610,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PORÇAO DE FRANGO A PASSARINHO 300g",
                             Popular = true,
-                            Preco = 15.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 15.00m,
                             UrlImagem = "porçaodefrangoapassarinho300g.jpg"
                         },
                         new
@@ -2937,7 +3627,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "BATATA 300g",
                             Popular = true,
-                            Preco = 15.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 15.00m,
                             UrlImagem = "batata300g.jpg"
                         },
                         new
@@ -2950,7 +3644,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "BATATA 500g",
                             Popular = true,
-                            Preco = 25.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 25.00m,
                             UrlImagem = "batata500g.jpg"
                         },
                         new
@@ -2963,7 +3661,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "TULIPA 500g",
                             Popular = true,
-                            Preco = 35.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 35.00m,
                             UrlImagem = "tulipa500g.jpg"
                         },
                         new
@@ -2976,7 +3678,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CALABRESA ACEBOLADA 300g",
                             Popular = true,
-                            Preco = 20.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 20.00m,
                             UrlImagem = "calabresaacebolada300g.jpg"
                         },
                         new
@@ -2989,7 +3695,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CALABRESA ACEBOLADA 500g",
                             Popular = true,
-                            Preco = 35.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 35.00m,
                             UrlImagem = "calabresaacebolada500g.jpg"
                         },
                         new
@@ -3002,7 +3712,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "DOSE DE WHISKY",
                             Popular = true,
-                            Preco = 10.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.00m,
                             UrlImagem = "dosedewhisky.jpg"
                         },
                         new
@@ -3015,7 +3729,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "FANTA UVA 2L",
                             Popular = true,
-                            Preco = 7.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 7.99m,
                             UrlImagem = "fantauva2l.jpg"
                         },
                         new
@@ -3028,7 +3746,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "AMSTEL 600ml",
                             Popular = true,
-                            Preco = 6.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 6.99m,
                             UrlImagem = "amstel600ml.jpg"
                         },
                         new
@@ -3041,7 +3763,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PALHEIRO SOLTO",
                             Popular = true,
-                            Preco = 1.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 1.50m,
                             UrlImagem = "palheirosolto.jpg"
                         },
                         new
@@ -3054,7 +3780,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "AGUA 1,5",
                             Popular = true,
-                            Preco = 4.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.99m,
                             UrlImagem = "agua1,5.jpg"
                         },
                         new
@@ -3067,7 +3797,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PAO DE MEL",
                             Popular = true,
-                            Preco = 7.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 7.99m,
                             UrlImagem = "paodemel.jpg"
                         },
                         new
@@ -3080,7 +3814,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "SPRITE 2L",
                             Popular = true,
-                            Preco = 11.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 11.00m,
                             UrlImagem = "sprite2l.jpg"
                         },
                         new
@@ -3093,7 +3831,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "SMIRNOFF ICE",
                             Popular = true,
-                            Preco = 10.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.00m,
                             UrlImagem = "smirnoffice.jpg"
                         },
                         new
@@ -3106,7 +3848,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "GT BEATS",
                             Popular = true,
-                            Preco = 8.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 8.00m,
                             UrlImagem = "gtbeats.jpg"
                         },
                         new
@@ -3119,7 +3865,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "FINI",
                             Popular = true,
-                            Preco = 2.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 2.00m,
                             UrlImagem = "fini.jpg"
                         },
                         new
@@ -3132,7 +3882,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "FINI",
                             Popular = true,
-                            Preco = 2.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 2.00m,
                             UrlImagem = "fini.jpg"
                         },
                         new
@@ -3145,7 +3899,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ZOMO SEDA/SOLTA",
                             Popular = true,
-                            Preco = 0.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 0.50m,
                             UrlImagem = "zomoseda/solta.jpg"
                         },
                         new
@@ -3158,7 +3916,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PEPSI 2L",
                             Popular = true,
-                            Preco = 8.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 8.00m,
                             UrlImagem = "pepsi2l.jpg"
                         },
                         new
@@ -3171,7 +3933,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "TUBAINA RICARDO",
                             Popular = true,
-                            Preco = 6.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 6.00m,
                             UrlImagem = "tubainaricardo.jpg"
                         },
                         new
@@ -3184,7 +3950,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "GUARANA ANTARTICA 2L",
                             Popular = true,
-                            Preco = 10.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.99m,
                             UrlImagem = "guaranaantartica2l.jpg"
                         },
                         new
@@ -3197,7 +3967,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "FANTA LARANJA LATA 220ML",
                             Popular = true,
-                            Preco = 3.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.99m,
                             UrlImagem = "fantalaranjalata220ml.jpg"
                         },
                         new
@@ -3210,7 +3984,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "passport whisk",
                             Popular = true,
-                            Preco = 59.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 59.99m,
                             UrlImagem = "passportwhisk.jpg"
                         },
                         new
@@ -3223,7 +4001,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "COMBO ENERGETICO BALY+ETERNITY",
                             Popular = true,
-                            Preco = 40.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 40.00m,
                             UrlImagem = "comboenergeticobaly+eternity.jpg"
                         },
                         new
@@ -3236,7 +4018,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "COPAO DE CHOPP 700ML",
                             Popular = true,
-                            Preco = 10.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.00m,
                             UrlImagem = "copaodechopp700ml.jpg"
                         },
                         new
@@ -3249,7 +4035,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "DEL VALLE 1,5",
                             Popular = true,
-                            Preco = 5.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 5.00m,
                             UrlImagem = "delvalle1,5.jpg"
                         },
                         new
@@ -3262,7 +4052,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "OLEO DE ALGODAO SOYA 14,5KG",
                             Popular = true,
-                            Preco = 177.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 177.99m,
                             UrlImagem = "oleodealgodaosoya14,5kg.jpg"
                         },
                         new
@@ -3275,7 +4069,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "BATATA PALITO TRADICIONAL(9MM)EASY CHEF PCT 1,1KG",
                             Popular = true,
-                            Preco = 12.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 12.50m,
                             UrlImagem = "batatapalitotradicional(9mm)easychefpct1,1kg.jpg"
                         },
                         new
@@ -3288,7 +4086,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ORIGINAL LATA 350ML CX CARTAO C/12 NPAL",
                             Popular = true,
-                            Preco = 4.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.50m,
                             UrlImagem = "originallata350mlcxcartaoc/12npal.jpg"
                         },
                         new
@@ -3301,7 +4103,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ORIGINAL 300ML",
                             Popular = true,
-                            Preco = 3.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.50m,
                             UrlImagem = "original300ml.jpg"
                         },
                         new
@@ -3314,7 +4120,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PEPSI COLA PET 2L CAIXA C/6",
                             Popular = true,
-                            Preco = 9.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 9.00m,
                             UrlImagem = "pepsicolapet2lcaixac/6.jpg"
                         },
                         new
@@ -3327,7 +4137,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "RED BULL BR LATA 250ML SIX PACK NPAL .",
                             Popular = true,
-                            Preco = 10.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.00m,
                             UrlImagem = "redbullbrlata250mlsixpacknpal..jpg"
                         },
                         new
@@ -3340,7 +4154,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "SPATEN N LT SLEEK 350ML CX CART C 12",
                             Popular = true,
-                            Preco = 4.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.50m,
                             UrlImagem = "spatennltsleek350mlcxcartc12.jpg"
                         },
                         new
@@ -3353,7 +4171,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "BRAHMA CHOPP LATA 350ML SH C/12 NPAL",
                             Popular = true,
-                            Preco = 4.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.00m,
                             UrlImagem = "brahmachopplata350mlshc/12npal.jpg"
                         },
                         new
@@ -3366,7 +4188,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "RED BULL MELANCIA LATA 250ML FOUR PACK NPAL",
                             Popular = true,
-                            Preco = 10.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.00m,
                             UrlImagem = "redbullmelancialata250mlfourpacknpal.jpg"
                         },
                         new
@@ -3379,7 +4205,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "BRAHMA CHOPP GFA VD 1L COM TTC",
                             Popular = true,
-                            Preco = 12.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 12.00m,
                             UrlImagem = "brahmachoppgfavd1lcomttc.jpg"
                         },
                         new
@@ -3392,7 +4222,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ANTARCTICA PILSEN 300ML",
                             Popular = true,
-                            Preco = 3.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.00m,
                             UrlImagem = "antarcticapilsen300ml.jpg"
                         },
                         new
@@ -3405,7 +4239,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ORIGINAL 600ML",
                             Popular = true,
-                            Preco = 10.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.00m,
                             UrlImagem = "original600ml.jpg"
                         },
                         new
@@ -3418,7 +4256,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "BUDWEISER 300ML",
                             Popular = true,
-                            Preco = 3.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.50m,
                             UrlImagem = "budweiser300ml.jpg"
                         },
                         new
@@ -3431,7 +4273,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PUREZA VITAL AGUA MIN. C GAS GFA PET 510ML FD C/12",
                             Popular = true,
-                            Preco = 4.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.50m,
                             UrlImagem = "purezavitalaguamin.cgasgfapet510mlfdc/12.jpg"
                         },
                         new
@@ -3444,7 +4290,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "GUARANA CHP ANTARCTICA PET 200ML SH C/12",
                             Popular = true,
-                            Preco = 2.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 2.00m,
                             UrlImagem = "guaranachpantarcticapet200mlshc/12.jpg"
                         },
                         new
@@ -3457,7 +4307,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "MINALBA AGUA MINERAL C/GAS GFA PET 1,5L FD C/6",
                             Popular = true,
-                            Preco = 5.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 5.00m,
                             UrlImagem = "minalbaaguamineralc/gasgfapet1,5lfdc/6.jpg"
                         },
                         new
@@ -3470,7 +4324,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "MINALBA AGUA MINERAL S/GAS GFA PET 1,5L FD C/6",
                             Popular = true,
-                            Preco = 4.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.00m,
                             UrlImagem = "minalbaaguaminerals/gasgfapet1,5lfdc/6.jpg"
                         },
                         new
@@ -3483,7 +4341,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PUREZA VITAL AGUA MIN. S GAS GFA PET 1,5L FD C/6",
                             Popular = true,
-                            Preco = 4.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.00m,
                             UrlImagem = "purezavitalaguamin.sgasgfapet1,5lfdc/6.jpg"
                         },
                         new
@@ -3496,7 +4358,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ORIGINAL LT 269ML CX CARTAO C/8 NPAL",
                             Popular = true,
-                            Preco = 3.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.50m,
                             UrlImagem = "originallt269mlcxcartaoc/8npal.jpg"
                         },
                         new
@@ -3509,7 +4375,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "SKOL LATA 350ML SH C/18 NPAL MULTPACK",
                             Popular = true,
-                            Preco = 4.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.00m,
                             UrlImagem = "skollata350mlshc/18npalmultpack.jpg"
                         },
                         new
@@ -3522,7 +4392,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "BRAHMA CHOPP ZERO LATA 350ML SH C/12 NPAL",
                             Popular = true,
-                            Preco = 4.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.00m,
                             UrlImagem = "brahmachoppzerolata350mlshc/12npal.jpg"
                         },
                         new
@@ -3535,7 +4409,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "FANTA LARANJA PET RET 2 LITROS 09UN",
                             Popular = true,
-                            Preco = 8.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 8.00m,
                             UrlImagem = "fantalaranjapetret2litros09un.jpg"
                         },
                         new
@@ -3548,7 +4426,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CC PET RET 2L 9 JD",
                             Popular = true,
-                            Preco = 8.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 8.00m,
                             UrlImagem = "ccpetret2l9jd.jpg"
                         },
                         new
@@ -3561,7 +4443,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "Cerv Heineken Pil 0,60Gfa Rt 24Un",
                             Popular = true,
-                            Preco = 13.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 13.00m,
                             UrlImagem = "cervheinekenpil0,60gfart24un.jpg"
                         },
                         new
@@ -3574,7 +4460,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "Cerv Heineken 0,0% 0,350ltsleekdes12unpb",
                             Popular = true,
-                            Preco = 7.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 7.00m,
                             UrlImagem = "cervheineken0,0%0,350ltsleekdes12unpb.jpg"
                         },
                         new
@@ -3587,7 +4477,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "RED BULL TROPICAL BR LATA 250ML FOUR PACK NPAL .",
                             Popular = true,
-                            Preco = 10.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.00m,
                             UrlImagem = "redbulltropicalbrlata250mlfourpacknpal..jpg"
                         },
                         new
@@ -3600,7 +4494,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ORIGINAL LATA 350ML CX CARTAO C/12 NPAL",
                             Popular = true,
-                            Preco = 4.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.00m,
                             UrlImagem = "originallata350mlcxcartaoc/12npal.jpg"
                         },
                         new
@@ -3613,7 +4511,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "FTA LAR LT 220ml 6U FI MAINLINE",
                             Popular = true,
-                            Preco = 3.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.00m,
                             UrlImagem = "ftalarlt220ml6ufimainline.jpg"
                         },
                         new
@@ -3626,7 +4528,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "Cerv Amstel Lager 0,60l Gfa Rt 24un",
                             Popular = true,
-                            Preco = 10.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.00m,
                             UrlImagem = "cervamstellager0,60lgfart24un.jpg"
                         },
                         new
@@ -3639,7 +4545,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "Cerv Heineken Pil 0,60Gfa Rt 24Un",
                             Popular = true,
-                            Preco = 13.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 13.00m,
                             UrlImagem = "cervheinekenpil0,60gfart24un.jpg"
                         },
                         new
@@ -3652,7 +4562,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ORIGINAL LATA FINA",
                             Popular = true,
-                            Preco = 3.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.99m,
                             UrlImagem = "originallatafina.jpg"
                         },
                         new
@@ -3665,7 +4579,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CHESTERFIELD",
                             Popular = true,
-                            Preco = 10.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.50m,
                             UrlImagem = "chesterfield.jpg"
                         },
                         new
@@ -3678,7 +4596,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "DUNHILL",
                             Popular = true,
-                            Preco = 15.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 15.50m,
                             UrlImagem = "dunhill.jpg"
                         },
                         new
@@ -3691,7 +4613,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CHESTERFIELD REMIX BEATS",
                             Popular = true,
-                            Preco = 12.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 12.00m,
                             UrlImagem = "chesterfieldremixbeats.jpg"
                         },
                         new
@@ -3704,7 +4630,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "RED BULL MELANCIA",
                             Popular = true,
-                            Preco = 10.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.00m,
                             UrlImagem = "redbullmelancia.jpg"
                         },
                         new
@@ -3717,7 +4647,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "RED BULL TROPICAL 250 ML",
                             Popular = true,
-                            Preco = 10.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.00m,
                             UrlImagem = "redbulltropical250ml.jpg"
                         },
                         new
@@ -3730,7 +4664,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "SPRITE LEMON FRESH",
                             Popular = true,
-                            Preco = 6.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 6.00m,
                             UrlImagem = "spritelemonfresh.jpg"
                         },
                         new
@@ -3743,7 +4681,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "POWER ADE 500ML",
                             Popular = true,
-                            Preco = 5.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 5.00m,
                             UrlImagem = "powerade500ml.jpg"
                         },
                         new
@@ -3756,7 +4698,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "NUSAQUINHO DIVERSOS",
                             Popular = true,
-                            Preco = 17.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 17.99m,
                             UrlImagem = "nusaquinhodiversos.jpg"
                         },
                         new
@@ -3769,7 +4715,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "VINHO CANTINA AGRICOLA 1L",
                             Popular = true,
-                            Preco = 25.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 25.00m,
                             UrlImagem = "vinhocantinaagricola1l.jpg"
                         },
                         new
@@ -3782,7 +4732,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "TAMPICO LATA 270ML FRUTAS CITRICAS",
                             Popular = true,
-                            Preco = 3.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.99m,
                             UrlImagem = "tampicolata270mlfrutascitricas.jpg"
                         },
                         new
@@ -3795,7 +4749,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "AMENDOIM 24G",
                             Popular = true,
-                            Preco = 2.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 2.00m,
                             UrlImagem = "amendoim24g.jpg"
                         },
                         new
@@ -3808,7 +4766,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "BATOM 16G",
                             Popular = true,
-                            Preco = 2.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 2.00m,
                             UrlImagem = "batom16g.jpg"
                         },
                         new
@@ -3821,7 +4783,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "COPO DE CHOP 500ML",
                             Popular = true,
-                            Preco = 7.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 7.00m,
                             UrlImagem = "copodechop500ml.jpg"
                         },
                         new
@@ -3834,7 +4800,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "BALAS",
                             Popular = true,
-                            Preco = 0.15m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 0.15m,
                             UrlImagem = "balas.jpg"
                         },
                         new
@@ -3847,7 +4817,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PIRULITO BIG BIG",
                             Popular = true,
-                            Preco = 1.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 1.00m,
                             UrlImagem = "pirulitobigbig.jpg"
                         },
                         new
@@ -3860,7 +4834,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CHOCOLATE LACTEA DIAM.NEG 80G",
                             Popular = true,
-                            Preco = 9.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 9.00m,
                             UrlImagem = "chocolatelacteadiam.neg80g.jpg"
                         },
                         new
@@ -3873,7 +4851,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "CHOCOLATE LACTEA BRANCO 80G",
                             Popular = true,
-                            Preco = 9.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 9.00m,
                             UrlImagem = "chocolatelacteabranco80g.jpg"
                         },
                         new
@@ -3886,7 +4868,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "PIRULITO ENERGE.28G",
                             Popular = true,
-                            Preco = 1.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 1.00m,
                             UrlImagem = "pirulitoenerge.28g.jpg"
                         },
                         new
@@ -3899,8 +4885,12 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "COCA COLA ZERO PET 2L",
                             Popular = true,
-                            Preco = 13.99m,
-                            UrlImagem = "cocacolazeropet2l.jpg"
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 13.99m,
+                            UrlImagem = "cocazolazeropet2l.jpg"
                         },
                         new
                         {
@@ -3912,7 +4902,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "copao Jack Daniels Apple",
                             Popular = true,
-                            Preco = 25.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 25.00m,
                             UrlImagem = "copaojackdanielsapple.jpg"
                         },
                         new
@@ -3925,7 +4919,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "RED LABEL GARRAFA",
                             Popular = true,
-                            Preco = 119.90m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 119.90m,
                             UrlImagem = "redlabelgarrafa.jpg"
                         },
                         new
@@ -3938,7 +4936,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "MONSTER 269ML ORIGINAL",
                             Popular = true,
-                            Preco = 8.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 8.50m,
                             UrlImagem = "monster269mloriginal.jpg"
                         },
                         new
@@ -3951,7 +4953,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "MONSTER 269 ML MANGO LOCO",
                             Popular = true,
-                            Preco = 8.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 8.50m,
                             UrlImagem = "monster269mlmangoloco.jpg"
                         },
                         new
@@ -3964,7 +4970,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "FANTA UVA 220ML LATA",
                             Popular = true,
-                            Preco = 3.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.00m,
                             UrlImagem = "fantauva220mllata.jpg"
                         },
                         new
@@ -3977,7 +4987,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "DEL VALLE 1L",
                             Popular = true,
-                            Preco = 5.00m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 5.00m,
                             UrlImagem = "delvalle1l.jpg"
                         },
                         new
@@ -3990,7 +5004,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "DEL VALLE 290ML MARACUJA",
                             Popular = true,
-                            Preco = 4.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.99m,
                             UrlImagem = "delvalle290mlmaracuja.jpg"
                         },
                         new
@@ -4003,7 +5021,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "DEL VALLE 290ML UVA",
                             Popular = true,
-                            Preco = 4.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.99m,
                             UrlImagem = "delvalle290mluva.jpg"
                         },
                         new
@@ -4016,7 +5038,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "MONSTER 473ML ULTRA PARADISE",
                             Popular = true,
-                            Preco = 11.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 11.50m,
                             UrlImagem = "monster473mlultraparadise.jpg"
                         },
                         new
@@ -4029,7 +5055,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "Cópia de EISENBAHN 350ml",
                             Popular = true,
-                            Preco = 3.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 3.99m,
                             UrlImagem = "cópiadeeisenbahn350ml.jpg"
                         },
                         new
@@ -4042,7 +5072,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "DEL VALLE UVA1L",
                             Popular = true,
-                            Preco = 10.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.99m,
                             UrlImagem = "delvalleuva1l.jpg"
                         },
                         new
@@ -4055,7 +5089,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ESPETO DE CORAÇÃO DE GALINHA",
                             Popular = true,
-                            Preco = 49.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 49.99m,
                             UrlImagem = "espetodecoraçãodegalinha.jpg"
                         },
                         new
@@ -4068,7 +5106,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "GATOREIDE SABOR BERRY BLUE 500 ml",
                             Popular = true,
-                            Preco = 7.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 7.99m,
                             UrlImagem = "gatoreidesaborberryblue500ml.jpg"
                         },
                         new
@@ -4081,7 +5123,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "DEL VALLE GOIABA1L",
                             Popular = true,
-                            Preco = 10.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.99m,
                             UrlImagem = "delvallegoiaba1l.jpg"
                         },
                         new
@@ -4094,7 +5140,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ESPETO DE KAFTA",
                             Popular = true,
-                            Preco = 49.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 49.99m,
                             UrlImagem = "espetodekafta.jpg"
                         },
                         new
@@ -4107,7 +5157,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "DEL VALLE PESSEGO1L",
                             Popular = true,
-                            Preco = 10.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.99m,
                             UrlImagem = "delvallepessego1l.jpg"
                         },
                         new
@@ -4120,7 +5174,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ESPETO DE FRANGO",
                             Popular = true,
-                            Preco = 39.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 39.99m,
                             UrlImagem = "espetodefrango.jpg"
                         },
                         new
@@ -4133,7 +5191,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "DEL VALLE LARANJA1L",
                             Popular = true,
-                            Preco = 10.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 10.99m,
                             UrlImagem = "delvallelaranja1l.jpg"
                         },
                         new
@@ -4146,7 +5208,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "ESPETO DE LINGUIÇA",
                             Popular = true,
-                            Preco = 39.99m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 39.99m,
                             UrlImagem = "espetodelinguiça.jpg"
                         },
                         new
@@ -4159,7 +5225,11 @@ namespace ApiECommerce.Migrations
                             MaisVendido = true,
                             Nome = "JUJU GOURMAT",
                             Popular = true,
-                            Preco = 4.50m,
+                            PrecoCusto = 0m,
+                            PrecoEntrega = 0m,
+                            PrecoGelada = 0m,
+                            PrecoQuente = 0m,
+                            PrecoRetirar = 4.50m,
                             UrlImagem = "jujugourmet.jpg"
                         });
                 });
@@ -4264,8 +5334,7 @@ namespace ApiECommerce.Migrations
                     b.HasOne("ApiECommerce.Entities.Produto", "Produto")
                         .WithMany()
                         .HasForeignKey("ProdutoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Pedido");
 

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ApiECommerce.Migrations
 {
     /// <inheritdoc />
-    public partial class First : Migration
+    public partial class first : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -106,7 +106,11 @@ namespace ApiECommerce.Migrations
                     Barcode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Detalhe = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     UrlImagem = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    Preco = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    PrecoCusto = table.Column<decimal>(type: "decimal(10,2)", nullable: false, defaultValue: 0m),
+                    PrecoQuente = table.Column<decimal>(type: "decimal(10,2)", nullable: false, defaultValue: 0m),
+                    PrecoGelada = table.Column<decimal>(type: "decimal(10,2)", nullable: false, defaultValue: 0m),
+                    PrecoEntrega = table.Column<decimal>(type: "decimal(10,2)", nullable: false, defaultValue: 0m),
+                    PrecoRetirar = table.Column<decimal>(type: "decimal(10,2)", nullable: false, defaultValue: 0m),
                     Popular = table.Column<bool>(type: "bit", nullable: false),
                     MaisVendido = table.Column<bool>(type: "bit", nullable: false),
                     EmEstoque = table.Column<int>(type: "int", nullable: false),
@@ -220,8 +224,17 @@ namespace ApiECommerce.Migrations
                     ValorTotal = table.Column<decimal>(type: "decimal(12,2)", nullable: false),
                     DataPedido = table.Column<DateTime>(type: "datetime2", nullable: true),
                     FormaPagamento = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClientesId = table.Column<int>(type: "int", nullable: true),
-                    UsuarioId = table.Column<int>(type: "int", nullable: true)
+                    ValorPago1 = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    FormaPagamento2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ValorPago2 = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClienteNome = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    VendedorNome = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DataPagamentoPrazo = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DataPagamentoPrazo2 = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Observacoes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UsuarioId = table.Column<int>(type: "int", nullable: true),
+                    ClientesId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -230,8 +243,7 @@ namespace ApiECommerce.Migrations
                         name: "FK_Pedidos_Clientes_ClientesId",
                         column: x => x.ClientesId,
                         principalTable: "Clientes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Pedidos_Usuarios_UsuarioId",
                         column: x => x.UsuarioId,
@@ -426,7 +438,8 @@ namespace ApiECommerce.Migrations
                     ValorTotal = table.Column<decimal>(type: "decimal(12,2)", nullable: false),
                     FormaPagamento = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PedidoId = table.Column<int>(type: "int", nullable: false),
-                    ProdutoId = table.Column<int>(type: "int", nullable: false)
+                    ProdutoId = table.Column<int>(type: "int", nullable: true),
+                    ProdutoNome = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -505,17 +518,24 @@ namespace ApiECommerce.Migrations
 
             migrationBuilder.InsertData(
                 table: "Produtos",
-                columns: new[] { "Id", "Barcode", "CategoriaId", "Detalhe", "DiasDisponiveis", "Disponivel", "EmEstoque", "MaisVendido", "Nome", "Popular", "Preco", "UrlImagem" },
+                columns: new[] { "Id", "Barcode", "CategoriaId", "Detalhe", "DiasDisponiveis", "Disponivel", "EmEstoque", "MaisVendido", "Nome", "Popular", "PrecoEntrega", "PrecoGelada", "PrecoQuente", "PrecoRetirar", "UrlImagem" },
                 values: new object[,]
                 {
-                    { 1, null, 1, "COCA COLA 2l RET", null, true, 1, true, "COCA COLA 2l RET", true, 8.49m, "cocacola2lret.jpg" },
-                    { 2, null, 2, "CERVEJA ORIGINAL LATA 350ML", null, true, 1, true, "CERVEJA ORIGINAL LATA 350ML", true, 4.99m, "cervejaoriginallata350ml.jpg" },
-                    { 3, null, 2, "BARRIGUDINHA ORGINAL 300ml", null, true, 1, true, "BARRIGUDINHA ORGINAL 300ml", true, 3.80m, "barrigudinhaorginal300ml.jpg" },
-                    { 4, null, 2, "BARRIGUDINHA SKOL 300 ml", null, true, 1, true, "BARRIGUDINHA SKOL 300 ml", true, 2.99m, "barrigudinhaskol300ml.jpg" },
-                    { 5, null, 2, "BARRIGUDINHA BRAHMA 300ml", null, true, 1, true, "BARRIGUDINHA BRAHMA 300ml", true, 2.99m, "barrigudinhabrahma300ml.jpg" },
-                    { 6, null, 2, "CRISTAL LATA 350ml", null, true, 1, true, "CRISTAL LATA 350ml", true, 2.99m, "cristallata350ml.jpg" },
-                    { 7, null, 1, "XERETA SABORES 2l", null, true, 1, true, "XERETA SABORES 2l", true, 5.99m, "xeretasabores2l.jpg" },
-                    { 8, null, 1, "COCA COLA 2L PET", null, true, 1, true, "COCA COLA 2L PET", true, 13.99m, "cocacola2lpet.jpg" },
+                    { 1, null, 1, "COCA COLA 2l RET", null, true, 1, true, "COCA COLA 2l RET", true, 8.49m, 8.49m, 8.49m, 8.49m, "cocacola2lret.jpg" },
+                    { 2, null, 2, "CERVEJA ORIGINAL LATA 350ML", null, true, 1, true, "CERVEJA ORIGINAL LATA 350ML", true, 4.99m, 4.99m, 4.99m, 4.99m, "cervejaoriginallata350ml.jpg" },
+                    { 3, null, 2, "BARRIGUDINHA ORGINAL 300ml", null, true, 1, true, "BARRIGUDINHA ORGINAL 300ml", true, 3.80m, 3.80m, 3.80m, 3.80m, "barrigudinhaorginal300ml.jpg" },
+                    { 4, null, 2, "BARRIGUDINHA SKOL 300 ml", null, true, 1, true, "BARRIGUDINHA SKOL 300 ml", true, 2.99m, 2.99m, 2.99m, 2.99m, "barrigudinhaskol300ml.jpg" },
+                    { 5, null, 2, "BARRIGUDINHA BRAHMA 300ml", null, true, 1, true, "BARRIGUDINHA BRAHMA 300ml", true, 2.99m, 2.99m, 2.99m, 2.99m, "barrigudinhabrahma300ml.jpg" },
+                    { 6, null, 2, "CRISTAL LATA 350ml", null, true, 1, true, "CRISTAL LATA 350ml", true, 2.99m, 2.99m, 2.99m, 2.99m, "cristallata350ml.jpg" },
+                    { 7, null, 1, "XERETA SABORES 2l", null, true, 1, true, "XERETA SABORES 2l", true, 5.99m, 5.99m, 5.99m, 5.99m, "xeretasabores2l.jpg" },
+                    { 8, null, 1, "COCA COLA 2L PET", null, true, 1, true, "COCA COLA 2L PET", true, 13.99m, 13.99m, 13.99m, 13.99m, "cocacola2lpet.jpg" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Produtos",
+                columns: new[] { "Id", "Barcode", "CategoriaId", "Detalhe", "DiasDisponiveis", "Disponivel", "EmEstoque", "MaisVendido", "Nome", "Popular", "PrecoRetirar", "UrlImagem" },
+                values: new object[,]
+                {
                     { 9, null, 1, "COCA COLA 350ML LATA", null, true, 1, true, "COCA COLA 350ML LATA", true, 4.99m, "cocacola350mllata.jpg" },
                     { 10, null, 1, "COCA COLA 200ML GARR", null, true, 1, true, "COCA COLA 200ML GARR", true, 2.50m, "cocacola200mlgarr.jpg" },
                     { 11, null, 1, "COCA COLA KS", null, true, 1, true, "COCA COLA KS", true, 4.50m, "cocacolaks.jpg" },
@@ -531,8 +551,19 @@ namespace ApiECommerce.Migrations
                     { 21, null, 4, "TNT 437ML LATA", null, true, 1, true, "TNT 437ML LATA", true, 10.99m, "tnt437mllata.jpg" },
                     { 22, null, 2, "CERVEJA IMPERIO LATA 350ml", null, true, 1, true, "CERVEJA IMPERIO LATA 350ml", true, 3.99m, "cervejaimperiolata350ml.jpg" },
                     { 23, null, 2, "HEINEKEN LONGE NECK 330ml", null, true, 1, true, "HEINEKEN LONGE NECK 330ml", true, 7.99m, "heinekenlongeneck330ml.jpg" },
-                    { 24, null, 2, "ORIGINAL GARRAFA 600 ml", null, true, 1, true, "ORIGINAL GARRAFA 600 ml", true, 10.00m, "originalgarrafa600ml.jpg" },
-                    { 25, null, 2, "CERVEJA HEINEKEM 600 ml", null, true, 1, true, "CERVEJA HEINEKEM 600 ml", true, 0.00m, "cervejaheinekem600ml.jpg" },
+                    { 24, null, 2, "ORIGINAL GARRAFA 600 ml", null, true, 1, true, "ORIGINAL GARRAFA 600 ml", true, 10.00m, "originalgarrafa600ml.jpg" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Produtos",
+                columns: new[] { "Id", "Barcode", "CategoriaId", "Detalhe", "DiasDisponiveis", "Disponivel", "EmEstoque", "MaisVendido", "Nome", "Popular", "UrlImagem" },
+                values: new object[] { 25, null, 2, "CERVEJA HEINEKEM 600 ml", null, true, 1, true, "CERVEJA HEINEKEM 600 ml", true, "cervejaheinekem600ml.jpg" });
+
+            migrationBuilder.InsertData(
+                table: "Produtos",
+                columns: new[] { "Id", "Barcode", "CategoriaId", "Detalhe", "DiasDisponiveis", "Disponivel", "EmEstoque", "MaisVendido", "Nome", "Popular", "PrecoRetirar", "UrlImagem" },
+                values: new object[,]
+                {
                     { 26, null, 5, "ICE LEEV 275ml", null, true, 1, true, "ICE LEEV 275ml", true, 6.99m, "iceleev275ml.jpg" },
                     { 27, null, 5, "CABARE ICE 275ml", null, true, 1, true, "CABARE ICE 275ml", true, 7.99m, "cabareice275ml.jpg" },
                     { 28, null, 2, "CERVEJA AMSTEL 355 ML", null, true, 1, true, "CERVEJA AMSTEL 355 ML", true, 3.99m, "cervejaamstel355ml.jpg" },
@@ -548,11 +579,33 @@ namespace ApiECommerce.Migrations
                     { 38, null, 6, "PALHEIRO TOMBADA MENTa", null, true, 1, true, "PALHEIRO TOMBADA MENTa", true, 8.00m, "palheirotombadamenta.jpg" },
                     { 39, null, 6, "PALHEIRO TRADICIONAL", null, true, 1, true, "PALHEIRO TRADICIONAL", true, 8.00m, "palheirotradicional.jpg" },
                     { 40, null, 7, "SEDA ZOMO", null, true, 1, true, "SEDA ZOMO", true, 4.00m, "sedazomo.jpg" },
-                    { 41, null, 6, "DON TABACCO BREZE", null, true, 1, true, "DON TABACCO BREZE", true, 15.00m, "dontabaccobreze.jpg" },
-                    { 42, null, 6, "TRITURADOR.", null, true, 1, true, "TRITURADOR.", true, 0.00m, "triturador..jpg" },
+                    { 41, null, 6, "DON TABACCO BREZE", null, true, 1, true, "DON TABACCO BREZE", true, 15.00m, "dontabaccobreze.jpg" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Produtos",
+                columns: new[] { "Id", "Barcode", "CategoriaId", "Detalhe", "DiasDisponiveis", "Disponivel", "EmEstoque", "MaisVendido", "Nome", "Popular", "UrlImagem" },
+                values: new object[] { 42, null, 6, "TRITURADOR.", null, true, 1, true, "TRITURADOR.", true, "triturador..jpg" });
+
+            migrationBuilder.InsertData(
+                table: "Produtos",
+                columns: new[] { "Id", "Barcode", "CategoriaId", "Detalhe", "DiasDisponiveis", "Disponivel", "EmEstoque", "MaisVendido", "Nome", "Popular", "PrecoRetirar", "UrlImagem" },
+                values: new object[,]
+                {
                     { 43, null, 10, "AGUA TONICA 350ml", null, true, 1, true, "AGUA TONICA 350ml", true, 4.99m, "aguatonica350ml.jpg" },
-                    { 44, null, 2, "CERVEJA AMISTEL 350 LATA", null, true, 1, true, "CERVEJA AMISTEL 350 LATA", true, 5.00m, "cervejaamistel350lata.jpg" },
-                    { 45, null, 4, "ATOMIC ENERG 270ML LATA", null, true, 1, true, "ATOMIC ENERG 270ML LATA", true, 0.00m, "atomicenerg270mllata.jpg" },
+                    { 44, null, 2, "CERVEJA AMISTEL 350 LATA", null, true, 1, true, "CERVEJA AMISTEL 350 LATA", true, 5.00m, "cervejaamistel350lata.jpg" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Produtos",
+                columns: new[] { "Id", "Barcode", "CategoriaId", "Detalhe", "DiasDisponiveis", "Disponivel", "EmEstoque", "MaisVendido", "Nome", "Popular", "UrlImagem" },
+                values: new object[] { 45, null, 4, "ATOMIC ENERG 270ML LATA", null, true, 1, true, "ATOMIC ENERG 270ML LATA", true, "atomicenerg270mllata.jpg" });
+
+            migrationBuilder.InsertData(
+                table: "Produtos",
+                columns: new[] { "Id", "Barcode", "CategoriaId", "Detalhe", "DiasDisponiveis", "Disponivel", "EmEstoque", "MaisVendido", "Nome", "Popular", "PrecoRetirar", "UrlImagem" },
+                values: new object[,]
+                {
                     { 46, null, 16, "SCHWEPPERS MIXED GIN TONICA PINK 269ML", null, true, 1, true, "SCHWEPPERS MIXED GIN TONICA PINK 269ML", true, 5.00m, "schweppersmixedgintonicapink269ml.jpg" },
                     { 47, null, 2, "CERVEJA AMSTEL 269ML LATA", null, true, 1, true, "CERVEJA AMSTEL 269ML LATA", true, 2.99m, "cervejaamstel269mllata.jpg" },
                     { 48, null, 1, "COCA COLA KS ZERO", null, true, 1, true, "COCA COLA KS ZERO", true, 4.50m, "cocacolakszero.jpg" },
@@ -563,13 +616,38 @@ namespace ApiECommerce.Migrations
                     { 53, null, 1, "GUARANA ANTARCTICA LATA 350 ml", null, true, 1, true, "GUARANA ANTARCTICA LATA 350 ml", true, 5.00m, "guaranaantarcticalata350ml.jpg" },
                     { 54, null, 1, "ITUBAINA ORGIANAL LATA 350ml", null, true, 1, true, "ITUBAINA ORGIANAL LATA 350ml", true, 5.00m, "itubainaorgianallata350ml.jpg" },
                     { 55, null, 1, "SCHWEPPES 350ML LATA", null, true, 1, true, "SCHWEPPES 350ML LATA", true, 4.99m, "schweppes350mllata.jpg" },
-                    { 56, null, 2, "HEINEKEN LONGE NECK 250 ml", null, true, 1, true, "HEINEKEN LONGE NECK 250 ml", true, 5.00m, "heinekenlongeneck250ml.jpg" },
-                    { 57, null, 2, "HENEKEN ZERO LONGE NECK 330 ml", null, true, 1, true, "HENEKEN ZERO LONGE NECK 330 ml", true, 0.00m, "henekenzerolongeneck330ml.jpg" },
+                    { 56, null, 2, "HEINEKEN LONGE NECK 250 ml", null, true, 1, true, "HEINEKEN LONGE NECK 250 ml", true, 5.00m, "heinekenlongeneck250ml.jpg" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Produtos",
+                columns: new[] { "Id", "Barcode", "CategoriaId", "Detalhe", "DiasDisponiveis", "Disponivel", "EmEstoque", "MaisVendido", "Nome", "Popular", "UrlImagem" },
+                values: new object[] { 57, null, 2, "HENEKEN ZERO LONGE NECK 330 ml", null, true, 1, true, "HENEKEN ZERO LONGE NECK 330 ml", true, "henekenzerolongeneck330ml.jpg" });
+
+            migrationBuilder.InsertData(
+                table: "Produtos",
+                columns: new[] { "Id", "Barcode", "CategoriaId", "Detalhe", "DiasDisponiveis", "Disponivel", "EmEstoque", "MaisVendido", "Nome", "Popular", "PrecoRetirar", "UrlImagem" },
+                values: new object[,]
+                {
                     { 58, null, 8, "TORCIDA SABORES", null, true, 1, true, "TORCIDA SABORES", true, 3.49m, "torcidasabores.jpg" },
                     { 59, null, 8, "FABITOS SABORESN 80gm", null, true, 1, true, "FABITOS SABORESN 80gm", true, 2.50m, "fabitossaboresn80gm.jpg" },
-                    { 60, null, 8, "BISCOITIO DE POLVILHO 100gm", null, true, 1, true, "BISCOITIO DE POLVILHO 100gm", true, 5.50m, "biscoitiodepolvilho100gm.jpg" },
-                    { 61, null, 1, "GUANA ANTARTICA 350ml LATA", null, true, 1, true, "GUANA ANTARTICA 350ml LATA", true, 0.00m, "guanaantartica350mllata.jpg" },
-                    { 62, null, 1, "GUANA ANTARTICA 200ml GARRAFA", null, true, 1, true, "GUANA ANTARTICA 200ml GARRAFA", true, 0.00m, "guanaantartica200mlgarrafa.jpg" },
+                    { 60, null, 8, "BISCOITIO DE POLVILHO 100gm", null, true, 1, true, "BISCOITIO DE POLVILHO 100gm", true, 5.50m, "biscoitiodepolvilho100gm.jpg" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Produtos",
+                columns: new[] { "Id", "Barcode", "CategoriaId", "Detalhe", "DiasDisponiveis", "Disponivel", "EmEstoque", "MaisVendido", "Nome", "Popular", "UrlImagem" },
+                values: new object[,]
+                {
+                    { 61, null, 1, "GUANA ANTARTICA 350ml LATA", null, true, 1, true, "GUANA ANTARTICA 350ml LATA", true, "guanaantartica350mllata.jpg" },
+                    { 62, null, 1, "GUANA ANTARTICA 200ml GARRAFA", null, true, 1, true, "GUANA ANTARTICA 200ml GARRAFA", true, "guanaantartica200mlgarrafa.jpg" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Produtos",
+                columns: new[] { "Id", "Barcode", "CategoriaId", "Detalhe", "DiasDisponiveis", "Disponivel", "EmEstoque", "MaisVendido", "Nome", "Popular", "PrecoRetirar", "UrlImagem" },
+                values: new object[,]
+                {
                     { 63, null, 1, "SPRITE 350 ml LATA", null, true, 1, true, "SPRITE 350 ml LATA", true, 5.00m, "sprite350mllata.jpg" },
                     { 64, null, 2, "HEINEKEN 350ml", null, true, 1, true, "HEINEKEN 350ml", true, 5.99m, "heineken350ml.jpg" },
                     { 65, null, 9, "DOSE SEM LIMAO", null, true, 1, true, "DOSE SEM LIMAO", true, 4.00m, "dosesemlimao.jpg" },
@@ -578,10 +656,24 @@ namespace ApiECommerce.Migrations
                     { 68, null, 9, "DESE JURUBEBA", null, true, 1, true, "DESE JURUBEBA", true, 3.00m, "desejurubeba.jpg" },
                     { 69, null, 10, "AGUA 510ml", null, true, 1, true, "AGUA 510ml", true, 2.99m, "agua510ml.jpg" },
                     { 70, null, 10, "AGUA COM GAS 510ml", null, true, 1, true, "AGUA COM GAS 510ml", true, 3.99m, "aguacomgas510ml.jpg" },
-                    { 71, null, 11, "CARVAO TARTARUGAO 2KG", null, true, 1, true, "CARVAO TARTARUGAO 2KG", true, 14.99m, "carvaotartarugao2kg.jpg" },
-                    { 72, null, 11, "CARTVAO TARTARUGAO 4KG", null, true, 1, true, "CARTVAO TARTARUGAO 4KG", true, 0.00m, "cartvaotartarugao4kg.jpg" },
-                    { 73, null, 20, "PAÇOCAO", null, true, 1, true, "PAÇOCAO", true, 0.00m, "paçocao.jpg" },
-                    { 74, null, 9, "PAÇOCA ROLHA", null, true, 1, true, "PAÇOCA ROLHA", true, 0.00m, "paçocarolha.jpg" },
+                    { 71, null, 11, "CARVAO TARTARUGAO 2KG", null, true, 1, true, "CARVAO TARTARUGAO 2KG", true, 14.99m, "carvaotartarugao2kg.jpg" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Produtos",
+                columns: new[] { "Id", "Barcode", "CategoriaId", "Detalhe", "DiasDisponiveis", "Disponivel", "EmEstoque", "MaisVendido", "Nome", "Popular", "UrlImagem" },
+                values: new object[,]
+                {
+                    { 72, null, 11, "CARTVAO TARTARUGAO 4KG", null, true, 1, true, "CARTVAO TARTARUGAO 4KG", true, "cartvaotartarugao4kg.jpg" },
+                    { 73, null, 20, "PAÇOCAO", null, true, 1, true, "PAÇOCAO", true, "paçocao.jpg" },
+                    { 74, null, 9, "PAÇOCA ROLHA", null, true, 1, true, "PAÇOCA ROLHA", true, "paçocarolha.jpg" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Produtos",
+                columns: new[] { "Id", "Barcode", "CategoriaId", "Detalhe", "DiasDisponiveis", "Disponivel", "EmEstoque", "MaisVendido", "Nome", "Popular", "PrecoRetirar", "UrlImagem" },
+                values: new object[,]
+                {
                     { 75, null, 2, "HEINEKEN 600ml", null, true, 1, true, "HEINEKEN 600ml", true, 14.99m, "heineken600ml.jpg" },
                     { 76, null, 2, "EISENBAHM 600ml", null, true, 1, true, "EISENBAHM 600ml", true, 6.00m, "eisenbahm600ml.jpg" },
                     { 77, null, 1, "FANTA UVA 350ml LATA", null, true, 1, true, "FANTA UVA 350ml LATA", true, 5.00m, "fantauva350mllata.jpg" },
@@ -601,12 +693,26 @@ namespace ApiECommerce.Migrations
                     { 91, null, 13, "GELO DE COCO MARUCAJA", null, true, 1, true, "GELO DE COCO MARUCAJA", true, 3.00m, "gelodecocomarucaja.jpg" },
                     { 92, null, 13, "GELO DE COCO MELANCIA", null, true, 1, true, "GELO DE COCO MELANCIA", true, 3.00m, "gelodecocomelancia.jpg" },
                     { 93, null, 14, "NUSAQUINH IORDUT DE MORANGO", null, true, 1, true, "NUSAQUINH IORDUT DE MORANGO", true, 18.00m, "nusaquinhiordutdemorango.jpg" },
-                    { 94, null, 15, "ASKOV LIMÂO 900ml", null, true, 1, true, "ASKOV LIMÂO 900ml", true, 19.99m, "askovlimâo900ml.jpg" },
-                    { 95, null, 15, "ASKOV KIWI 900ml", null, true, 1, true, "ASKOV KIWI 900ml", true, 0.00m, "askovkiwi900ml.jpg" },
-                    { 96, null, 15, "ASKOV MARACUJÀ 900ml", null, true, 1, true, "ASKOV MARACUJÀ 900ml", true, 0.00m, "askovmaracujà900ml.jpg" },
-                    { 97, null, 15, "ASKOV BLUEBERRY 900ml", null, true, 1, true, "ASKOV BLUEBERRY 900ml", true, 0.00m, "askovblueberry900ml.jpg" },
-                    { 98, null, 15, "ASKOV VODKA 900ml", null, true, 1, true, "ASKOV VODKA 900ml", true, 0.00m, "askovvodka900ml.jpg" },
-                    { 99, null, 15, "ASKOV FRUTAS ROXAS 900ml", null, true, 1, true, "ASKOV FRUTAS ROXAS 900ml", true, 0.00m, "askovfrutasroxas900ml.jpg" },
+                    { 94, null, 15, "ASKOV LIMÂO 900ml", null, true, 1, true, "ASKOV LIMÂO 900ml", true, 19.99m, "askovlimâo900ml.jpg" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Produtos",
+                columns: new[] { "Id", "Barcode", "CategoriaId", "Detalhe", "DiasDisponiveis", "Disponivel", "EmEstoque", "MaisVendido", "Nome", "Popular", "UrlImagem" },
+                values: new object[,]
+                {
+                    { 95, null, 15, "ASKOV KIWI 900ml", null, true, 1, true, "ASKOV KIWI 900ml", true, "askovkiwi900ml.jpg" },
+                    { 96, null, 15, "ASKOV MARACUJÀ 900ml", null, true, 1, true, "ASKOV MARACUJÀ 900ml", true, "askovmaracujà900ml.jpg" },
+                    { 97, null, 15, "ASKOV BLUEBERRY 900ml", null, true, 1, true, "ASKOV BLUEBERRY 900ml", true, "askovblueberry900ml.jpg" },
+                    { 98, null, 15, "ASKOV VODKA 900ml", null, true, 1, true, "ASKOV VODKA 900ml", true, "askovvodka900ml.jpg" },
+                    { 99, null, 15, "ASKOV FRUTAS ROXAS 900ml", null, true, 1, true, "ASKOV FRUTAS ROXAS 900ml", true, "askovfrutasroxas900ml.jpg" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Produtos",
+                columns: new[] { "Id", "Barcode", "CategoriaId", "Detalhe", "DiasDisponiveis", "Disponivel", "EmEstoque", "MaisVendido", "Nome", "Popular", "PrecoRetirar", "UrlImagem" },
+                values: new object[,]
+                {
                     { 100, null, 16, "ETERNITY GIN TROPICAL FRUTS 900ml", null, true, 1, true, "ETERNITY GIN TROPICAL FRUTS 900ml", true, 23.99m, "eternitygintropicalfruts900ml.jpg" },
                     { 101, null, 16, "ETERNITY GIN MAÇÂ VERDE 900ml", null, true, 1, true, "ETERNITY GIN MAÇÂ VERDE 900ml", true, 23.99m, "eternityginmaçâverde900ml.jpg" },
                     { 102, null, 16, "ETERNITY GIN WATERMWLON 900ml", null, true, 1, true, "ETERNITY GIN WATERMWLON 900ml", true, 23.99m, "eternityginwatermwlon900ml.jpg" },
@@ -746,7 +852,7 @@ namespace ApiECommerce.Migrations
                     { 236, null, 20, "CHOCOLATE LACTEA DIAM.NEG 80G", null, true, 1, true, "CHOCOLATE LACTEA DIAM.NEG 80G", true, 9.00m, "chocolatelacteadiam.neg80g.jpg" },
                     { 237, null, 20, "CHOCOLATE LACTEA BRANCO 80G", null, true, 1, true, "CHOCOLATE LACTEA BRANCO 80G", true, 9.00m, "chocolatelacteabranco80g.jpg" },
                     { 238, null, 20, "PIRULITO ENERGE.28G", null, true, 1, true, "PIRULITO ENERGE.28G", true, 1.00m, "pirulitoenerge.28g.jpg" },
-                    { 239, null, 1, "COCA COLA ZERO PET 2L", null, true, 1, true, "COCA COLA ZERO PET 2L", true, 13.99m, "cocacolazeropet2l.jpg" },
+                    { 239, null, 1, "COCA COLA ZERO PET 2L", null, true, 1, true, "COCA COLA ZERO PET 2L", true, 13.99m, "cocazolazeropet2l.jpg" },
                     { 240, null, 21, "copao Jack Daniels Apple", null, true, 1, true, "copao Jack Daniels Apple", true, 25.00m, "copaojackdanielsapple.jpg" },
                     { 241, null, 21, "RED LABEL GARRAFA", null, true, 1, true, "RED LABEL GARRAFA", true, 119.90m, "redlabelgarrafa.jpg" },
                     { 242, null, 4, "MONSTER 269ML ORIGINAL", null, true, 1, true, "MONSTER 269ML ORIGINAL", true, 8.50m, "monster269mloriginal.jpg" },

@@ -108,6 +108,35 @@ public class PedidosController : ControllerBase
         return Ok(pedidos);
     }
 
+    // GET: api/Pedidos
+    // Retorna todos os pedidos (sem filtro de data)
+    [HttpGet]
+    public async Task<IActionResult> GetAllPedidos()
+    {
+        var pedidos = await dbContext.Pedidos
+            .Include(p => p.Usuario)
+            .OrderByDescending(p => p.DataPedido)
+            .Select(p => new ApiECommerce.DTOs.PedidoDTO
+            {
+                Id = p.Id,
+                Endereco = p.Endereco,
+                ValorTotal = p.ValorTotal,
+                DataPedido = p.DataPedido,
+                FormaPagamento = p.FormaPagamento,
+                ValorPago1 = p.ValorPago1,
+                FormaPagamento2 = p.FormaPagamento2,
+                ValorPago2 = p.ValorPago2,
+                Status = p.Status,
+                ClienteNome = p.ClienteNome,
+                VendedorNome = p.Usuario != null ? p.Usuario.Nome : p.VendedorNome,
+                DataPagamentoPrazo = p.DataPagamentoPrazo,
+                DataPagamentoPrazo2 = p.DataPagamentoPrazo2,
+                Observacoes = p.Observacoes
+            }).ToListAsync();
+
+        return Ok(pedidos);
+    }
+
     // GET: api/Pedidos/Detalhes/{pedidoId}
     [HttpGet("Detalhes/{pedidoId}")]
     public async Task<IActionResult> GetPedidoDetalhes(int pedidoId)
@@ -141,6 +170,25 @@ public class PedidosController : ControllerBase
             Console.WriteLine($"Erro ao buscar detalhes do pedido {pedidoId}: {ex}");
             return StatusCode(500, "Erro ao buscar detalhes do pedido.");
         }
+    }
+
+    // PUT: api/Pedidos/{id}/cancel
+    // Marca um pedido como cancelado. Não deleta registros; apenas atualiza o status.
+    [HttpPut("{id}/cancel")]
+    public async Task<IActionResult> CancelarPedido(int id)
+    {
+        var pedido = await dbContext.Pedidos.FindAsync(id);
+        if (pedido == null) return NotFound($"Pedido {id} não encontrado.");
+
+        if (string.Equals(pedido.Status, "Cancelado", StringComparison.OrdinalIgnoreCase))
+        {
+            return BadRequest("Pedido já está cancelado.");
+        }
+
+        pedido.Status = "Cancelado";
+        // opcional: zerar valores pagos ou anotar observações de cancelamento
+        await dbContext.SaveChangesAsync();
+        return Ok(new { Id = pedido.Id, Status = pedido.Status });
     }
 
     // GET: api/pedidos/data/2025-04-22

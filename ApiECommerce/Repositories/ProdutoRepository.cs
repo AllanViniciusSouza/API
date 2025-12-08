@@ -63,6 +63,11 @@ public class ProdutoRepository : IProdutoRepository
         // Atualiza apenas os campos necessários
         produtoExistente.Nome = produto.Nome;
         produtoExistente.Preco = produto.Preco;
+        produtoExistente.PrecoCusto = produto.PrecoCusto;
+        produtoExistente.PrecoQuente = produto.PrecoQuente;
+        produtoExistente.PrecoGelada = produto.PrecoGelada;
+        produtoExistente.PrecoEntrega = produto.PrecoEntrega;
+        produtoExistente.PrecoRetirar = produto.PrecoRetirar;
         produtoExistente.Barcode = produto.Barcode;
         produtoExistente.Popular = produto.Popular;
         produtoExistente.CategoriaId = produto.CategoriaId;
