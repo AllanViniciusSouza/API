@@ -276,4 +276,34 @@ public class NotasEntradaController : ControllerBase
         if (nota == null) return NotFound();
         return Ok(nota);
     }
+
+    // GET: api/NotasEntrada
+    // Retorna todas as notas com seus itens e informações de produto
+    [HttpGet]
+    public async Task<IActionResult> GetTodasNotas()
+    {
+        var notas = await _db.NotasEntrada
+            .Include(n => n.Itens)
+                .ThenInclude(i => i.Produto)
+            .OrderByDescending(n => n.DataEmissao)
+            .Select(n => new {
+                n.Id,
+                n.NumeroNota,
+                n.DataEmissao,
+                n.Fornecedor,
+                n.ValorTotal,
+                Itens = n.Itens.Select(i => new {
+                    i.Id,
+                    i.NotaEntradaId,
+                    ProdutoId = i.ProdutoId,
+                    ProdutoNome = i.Produto != null ? i.Produto.Nome : i.Nome,
+                    i.Nome,
+                    i.Barcode,
+                    i.Quantidade,
+                    i.PrecoCusto
+                }).ToList()
+            }).ToListAsync();
+
+        return Ok(notas);
+    }
 }
