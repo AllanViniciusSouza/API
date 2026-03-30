@@ -28,16 +28,12 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<ItemComanda>()
-        .HasOne(i => i.Comanda)
-        .WithMany(c => c.Itens)
-        .HasForeignKey(i => i.ComandaId)
-        .OnDelete(DeleteBehavior.Cascade); // ou Restrict, se preferir
-
+        // Configura o relacionamento entre Comanda e ItemComanda com exclusão em cascata
         modelBuilder.Entity<Comanda>()
-                .HasMany(c => c.Itens)
-                .WithOne(i => i.Comanda)
-                .HasForeignKey(i => i.ComandaId);
+            .HasMany(c => c.Itens)
+            .WithOne(i => i.Comanda)
+            .HasForeignKey(i => i.ComandaId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Estoque>()
             .HasOne(e => e.Produto)
@@ -391,6 +387,10 @@ public class AppDbContext : DbContext
         //);
     }
 }
+
+
+
+
 
 
 

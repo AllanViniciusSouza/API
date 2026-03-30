@@ -3,9 +3,11 @@ using ApiECommerce.DTOs;
 using ApiECommerce.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.Json;
+using System.Linq;
 
 namespace ApiECommerce.Controllers
 {
@@ -150,12 +152,12 @@ namespace ApiECommerce.Controllers
                 {
                     Id = d.Id,
                     ProdutoId = d.ProdutoId,
-                    ProdutoNome = d.Produto?.Nome,
-                    ProdutoImagem = d.Produto?.UrlImagem,
+                    ProdutoNome = d.Produto != null ? d.Produto.Nome : d.ProdutoNome,
+                    ProdutoImagem = d.Produto != null ? d.Produto.UrlImagem : null,
                     Quantidade = d.Quantidade,
                     ProdutoPreco = d.Preco,
                     SubTotal = d.ValorTotal,
-                    CaminhoImagem = d.Produto?.UrlImagem
+                    CaminhoImagem = d.Produto != null ? d.Produto.UrlImagem : null
                 }).ToList();
 
                 if (pedidoEntity != null)
@@ -197,7 +199,8 @@ namespace ApiECommerce.Controllers
 
             var texto = string.Concat(headerIdText, headerCliente, headerVendedor, itensTexto, "\n\n", headerEndereco, totalText);
 
-            var result = new {
+            var result = new
+            {
                 Texto = texto.Trim(),
                 Itens = items,
                 PedidoId = pedidoId
@@ -220,6 +223,9 @@ namespace ApiECommerce.Controllers
             string vendedorNome = null;
             string endereco = null;
             decimal valorTotal = 0M;
+            DateTime? dataPedido = null;
+            string formaPagamento = null;
+            DateTime? dataPagamentoPrazo = null;
 
             if (payload.TryGetProperty("Id", out var idProp) && idProp.ValueKind == JsonValueKind.Number && idProp.TryGetInt32(out var idv))
                 pedidoId = idv;
@@ -231,6 +237,12 @@ namespace ApiECommerce.Controllers
                 endereco = eProp.GetString();
             if (payload.TryGetProperty("ValorTotal", out var vtProp) && vtProp.ValueKind == JsonValueKind.Number && vtProp.TryGetDecimal(out var vtd))
                 valorTotal = vtd;
+            if (payload.TryGetProperty("DataPedido", out var dpProp) && dpProp.ValueKind == JsonValueKind.String && DateTime.TryParse(dpProp.GetString(), out var dpv))
+                dataPedido = dpv;
+            if (payload.TryGetProperty("FormaPagamento", out var fpProp) && fpProp.ValueKind == JsonValueKind.String)
+                formaPagamento = fpProp.GetString();
+            if (payload.TryGetProperty("DataPagamentoPrazo", out var dppProp) && dppProp.ValueKind == JsonValueKind.String && DateTime.TryParse(dppProp.GetString(), out var dppv))
+                dataPagamentoPrazo = dppv;
 
             var items = new List<PedidoDetalheDTO>();
             if (payload.TryGetProperty("Itens", out var itensElem) && itensElem.ValueKind == JsonValueKind.Array)
@@ -291,12 +303,12 @@ namespace ApiECommerce.Controllers
                 {
                     Id = d.Id,
                     ProdutoId = d.ProdutoId,
-                    ProdutoNome = d.Produto?.Nome,
-                    ProdutoImagem = d.Produto?.UrlImagem,
+                    ProdutoNome = d.Produto != null ? d.Produto.Nome : d.ProdutoNome,
+                    ProdutoImagem = d.Produto != null ? d.Produto.UrlImagem : null,
                     Quantidade = d.Quantidade,
                     ProdutoPreco = d.Preco,
                     SubTotal = d.ValorTotal,
-                    CaminhoImagem = d.Produto?.UrlImagem
+                    CaminhoImagem = d.Produto != null ? d.Produto.UrlImagem : null
                 }).ToList();
 
                 if (pedidoEntity != null)
@@ -305,6 +317,9 @@ namespace ApiECommerce.Controllers
                     vendedorNome ??= pedidoEntity.VendedorNome;
                     endereco ??= pedidoEntity.Endereco;
                     if (valorTotal == 0M) valorTotal = pedidoEntity.ValorTotal;
+                    dataPedido ??= pedidoEntity.DataPedido;
+                    formaPagamento ??= pedidoEntity.FormaPagamento;
+                    dataPagamentoPrazo ??= pedidoEntity.DataPagamentoPrazo;
                 }
             }
 
@@ -324,9 +339,14 @@ namespace ApiECommerce.Controllers
             }
 
             var headerIdText = pedidoId > 0 ? $"Pedido #{pedidoId}\n" : string.Empty;
+            var headerDataPedido = dataPedido.HasValue ? $"Data: {dataPedido.Value:dd/MM/yyyy HH:mm}\n" : string.Empty;
             var headerCliente = !string.IsNullOrWhiteSpace(clienteNome) ? $"Cliente: {clienteNome}\n" : string.Empty;
             var headerVendedor = !string.IsNullOrWhiteSpace(vendedorNome) ? $"Vendedor: {vendedorNome}\n" : string.Empty;
             var headerEndereco = !string.IsNullOrWhiteSpace(endereco) ? $"Endereco: {endereco}\n" : string.Empty;
+            var headerFormaPagamento = !string.IsNullOrWhiteSpace(formaPagamento) ? $"Forma de Pagamento: {formaPagamento}\n" : string.Empty;
+            var headerDataPagamentoPrazo = dataPagamentoPrazo.HasValue && formaPagamento?.ToLower().Contains("prazo") == true 
+                ? $"Vencimento: {dataPagamentoPrazo.Value:dd/MM/yyyy}\n" 
+                : string.Empty;
 
             var itensTexto = items.Any()
                 ? string.Join("\n", items.Select(i => $"- {i.Quantidade} x {i.ProdutoNome ?? "Produto"} R${i.ProdutoPreco:0.00} = R${i.SubTotal:0.00}"))
@@ -334,7 +354,18 @@ namespace ApiECommerce.Controllers
 
             var totalText = valorTotal != 0M ? $"\nTotal: R${valorTotal:0.00}" : string.Empty;
 
-            var texto = string.Concat(headerIdText, headerCliente, headerVendedor, itensTexto, "\n\n", headerEndereco, totalText).Trim();
+            var texto = string.Concat(
+                headerIdText, 
+                headerDataPedido, 
+                headerCliente, 
+                headerVendedor, 
+                headerEndereco,
+                headerFormaPagamento,
+                headerDataPagamentoPrazo,
+                "--------------------------\n",
+                itensTexto, 
+                totalText
+            ).Trim();
 
             // Send to network printer
             var printerIp = "192.168.1.51";
@@ -358,11 +389,11 @@ namespace ApiECommerce.Controllers
                 await ns.WriteAsync(doubleSize, 0, doubleSize.Length);
                 await ns.WriteAsync(boldOn, 0, boldOn.Length);
 
-                var title = "ROTA 019 - COMANDA\n";
+                var title = "ROTA 019\n";
                 await ns.WriteAsync(Encoding.UTF8.GetBytes(title));
 
                 await ns.WriteAsync(boldOff, 0, boldOff.Length);
-                await ns.WriteAsync(Encoding.UTF8.GetBytes("--------------------------\n"));
+                await ns.WriteAsync(normalSize, 0, normalSize.Length);
                 await ns.WriteAsync(Encoding.UTF8.GetBytes(texto + "\n\n\n"));
                 await ns.WriteAsync(Encoding.UTF8.GetBytes("\n\n\n\n\n"));
                 await ns.WriteAsync(cut, 0, cut.Length);
@@ -377,7 +408,7 @@ namespace ApiECommerce.Controllers
             return Ok(new { Printed = true, PedidoId = pedidoId });
         }
 
-        
+
 
         [HttpGet]
         public async Task<IActionResult> GetComandasParaImpressao()
@@ -402,11 +433,11 @@ namespace ApiECommerce.Controllers
             var lista = comandas.Select(c =>
             {
                 var itensTexto = string.Join("\n", c.Itens
-                     //.Where(i => i.Produto.CategoriaId == 99) // filtro direto
+                    //.Where(i => i.Produto.CategoriaId == 99) // filtro direto
                     .Select(i => $"-{i.Quantidade}x{i.Produto?.Nome ?? "Produto"}"));
 
                 //var itensTexto = string.Join("\n", c.Itens.Select(i =>
-           //$"- {i.Quantidade} x {i.Produto?.Nome ?? "Produto"} R${i.PrecoUnitario:0.00}"));
+                //$"- {i.Quantidade} x {i.Produto?.Nome ?? "Produto"} R${i.PrecoUnitario:0.00}"));
 
                 return new ComandaImpressaoDTO
                 {
@@ -441,6 +472,149 @@ namespace ApiECommerce.Controllers
             await _context.SaveChangesAsync();
 
             return Ok("Status atualizado.");
+        }
+
+        [HttpPost("open")]
+        public async Task<IActionResult> OpenCashDrawer([FromBody] JsonElement payload)
+        {
+            try
+            {
+                // Variantes de comandos ESC/POS para abrir gaveta
+                var init = new byte[] { 0x1B, 0x40 }; // ESC @
+                var pulseA = new byte[] { 0x1B, 0x70, 0x00, 0x19, 0xFA };
+                var pulseB = new byte[] { 0x1B, 0x70, 0x01, 0x3C, 0x78 };
+                var pulseC = new byte[] { 0x1B, 0x70, 0x00, 0x3C, 0x78 };
+                var pulseD = new byte[] { 0x1B, 0x70, 0x01, 0x19, 0xFA };
+
+                byte[] Combine(params byte[][] arrays)
+                {
+                    var length = arrays.Sum(a => a.Length);
+                    var buffer = new byte[length];
+                    var offset = 0;
+                    foreach (var a in arrays)
+                    {
+                        Buffer.BlockCopy(a, 0, buffer, offset, a.Length);
+                        offset += a.Length;
+                    }
+                    return buffer;
+                }
+
+                var sequences = new List<(string Name, byte[] Cmd)>
+                {
+                    ("Init + PulseA", Combine(init, pulseA)),
+                    ("Init + PulseB", Combine(init, pulseB)),
+                    ("Init + PulseC", Combine(init, pulseC)),
+                    ("Init + PulseD", Combine(init, pulseD)),
+                    ("PulseA (raw)", pulseA),
+                    ("PulseB (raw)", pulseB),
+                    ("PulseC (raw)", pulseC),
+                    ("PulseD (raw)", pulseD)
+                };
+
+                // Detecta se devemos usar impressora de rede ou impressora local
+                string printerIp = null;
+                int printerPort = 9100;
+                string printerName = "TM-T20";
+
+                bool useNetwork = false;
+                if (payload.ValueKind == JsonValueKind.Object && payload.TryGetProperty("PrinterIp", out var ipElem) && ipElem.ValueKind == JsonValueKind.String)
+                {
+                    useNetwork = true;
+                    printerIp = ipElem.GetString();
+                    if (payload.TryGetProperty("PrinterPort", out var portProp) && portProp.ValueKind == JsonValueKind.Number && portProp.TryGetInt32(out var p))
+                        printerPort = p;
+                }
+                else if (payload.ValueKind == JsonValueKind.Object && payload.TryGetProperty("PrinterName", out var pn) && pn.ValueKind == JsonValueKind.String)
+                {
+                    printerName = pn.GetString();
+                }
+
+                var attempts = new List<object>();
+                bool anySuccess = false;
+
+                foreach (var seq in sequences)
+                {
+                    if (anySuccess) break; // stop after first successful attempt
+
+                    try
+                    {
+                        if (useNetwork)
+                        {
+                            using var client = new TcpClient();
+
+                            var connectTask = client.ConnectAsync(printerIp, printerPort);
+                            var completed = await Task.WhenAny(connectTask, Task.Delay(3000)); // 3s timeout
+                            if (completed != connectTask)
+                                throw new System.TimeoutException("Timeout connecting to printer");
+
+                            using var ns = client.GetStream();
+                            await ns.WriteAsync(seq.Cmd, 0, seq.Cmd.Length);
+                            await ns.FlushAsync();
+
+                            attempts.Add(new { Sequence = seq.Name, Success = true, Transport = "tcp", Info = $"Sent {seq.Cmd.Length} bytes to {printerIp}:{printerPort}" });
+                            anySuccess = true;
+                        }
+                        else
+                        {
+                            // Local printer via Windows spooler
+                            RawPrinterHelper.SendBytesToPrinter(printerName, seq.Cmd);
+                            attempts.Add(new { Sequence = seq.Name, Success = true, Transport = "local", Info = $"Sent {seq.Cmd.Length} bytes to printer '{printerName}'" });
+                            anySuccess = true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        attempts.Add(new { Sequence = seq.Name, Success = false, Error = ex.Message, Transport = useNetwork ? "tcp" : "local" });
+                        // continue trying next sequence
+                    }
+                }
+
+                object printerInfo = useNetwork
+                    ? (object)new Dictionary<string, object> { ["Type"] = "network", ["Ip"] = printerIp ?? string.Empty, ["Port"] = printerPort }
+                    : new Dictionary<string, object> { ["Type"] = "local", ["Name"] = printerName };
+
+                return Ok(new
+                {
+                    Printer = printerInfo,
+                    AnySuccess = anySuccess,
+                    Attempts = attempts
+                });
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = "Erro ao abrir caixa registradora",
+                    error = ex.Message
+                });
+            }
+        }
+
+        public class RawPrinterHelper
+        {
+            [DllImport("winspool.Drv", EntryPoint = "OpenPrinterA",
+                SetLastError = true, CharSet = CharSet.Ansi)]
+            static extern bool OpenPrinter(string pPrinterName,
+                out IntPtr phPrinter, IntPtr pDefault);
+
+            [DllImport("winspool.Drv", SetLastError = true)]
+            static extern bool ClosePrinter(IntPtr hPrinter);
+
+            [DllImport("winspool.Drv", SetLastError = true)]
+            static extern bool WritePrinter(IntPtr hPrinter,
+                byte[] pBytes, int dwCount, out int dwWritten);
+
+            public static bool SendBytesToPrinter(string printerName, byte[] bytes)
+            {
+                IntPtr hPrinter;
+                OpenPrinter(printerName, out hPrinter, IntPtr.Zero);
+
+                WritePrinter(hPrinter, bytes, bytes.Length, out _);
+                ClosePrinter(hPrinter);
+
+                return true;
+            }
         }
     }
 }

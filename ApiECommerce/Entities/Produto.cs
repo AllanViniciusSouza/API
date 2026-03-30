@@ -60,20 +60,20 @@ public class Produto
     [JsonIgnore]
     public ICollection<Inventario>? Inventarios { get; set; } = new List<Inventario>();
 
-    public void AtualizarDisponibilidade()
-    {
-        if (string.IsNullOrWhiteSpace(DiasDisponiveis))
-        {
-            Disponivel = false;
-            return;
-        }
+    //public void AtualizarDisponibilidade()
+    //{
+    //    if (string.IsNullOrWhiteSpace(DiasDisponiveis))
+    //    {
+    //        Disponivel = false;
+    //        return;
+    //    }
 
-        var dias = DiasDisponiveis
-            .Split(',', StringSplitOptions.RemoveEmptyEntries)
-            .Select(d => d.Trim())
-            .ToList();
+    //    var dias = DiasDisponiveis
+    //        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+    //        .Select(d => d.Trim())
+    //        .ToList();
 
-        var hoje = DateTime.Today.DayOfWeek.ToString();
-        Disponivel = dias.Any(d => string.Equals(d, hoje, StringComparison.OrdinalIgnoreCase));
-    }
+    //    var hoje = DateTime.Today.DayOfWeek.ToString();
+    //    Disponivel = dias.Any(d => string.Equals(d, hoje, StringComparison.OrdinalIgnoreCase));
+    //}
 }

@@ -54,43 +54,54 @@ public class ItensComandaController : ControllerBase
     {
         try
         {
+            // Busca a comanda pelo nome
+            var comanda = await dbContext.Comandas.FirstOrDefaultAsync(c => c.Nome == itemComanda.Nome);
+            
+            if (comanda == null)
+            {
+                return NotFound($"Comanda '{itemComanda.Nome}' não encontrada.");
+            }
+
             var itemNaComanda = await dbContext.ItensComanda
                                 .FirstOrDefaultAsync(s =>
                                 s.ProdutoId == itemComanda.ProdutoId &&
-                                (s.Nome == itemComanda.Nome));
+                                s.ComandaId == comanda.Id);
 
             if (itemNaComanda is not null)
             {
-                var comanda = await dbContext.Comandas.FirstOrDefaultAsync(c =>
-                                    c.Nome == itemNaComanda.Nome);
-
+                // Se o item já existe, apenas aumenta a quantidade
                 itemNaComanda.Quantidade += itemComanda.Quantidade;
-
-                dbContext.Comandas.Update(comanda);
             }
             else
             {
-                var produto = await dbContext.Produtos.FirstOrDefaultAsync(p => p.Id == itemComanda.ProdutoId);
-
-                var carrinho = new ItemComanda()
+                // Cria um novo item e associa à comanda através do ComandaId
+                var novoItem = new ItemComanda()
                 {
-                    PrecoUnitario = produto.Preco,
+                    PrecoUnitario = itemComanda.PrecoUnitario,
                     Quantidade = itemComanda.Quantidade,
-                    ProdutoId = produto.Id,
-                    Nome = itemComanda.Nome
+                    ProdutoId = itemComanda.ProdutoId,
+                    Nome = itemComanda.Nome,
+                    ComandaId = comanda.Id // ✅ Define o ComandaId para estabelecer o relacionamento
                 };
-                dbContext.ItensComanda.Add(carrinho);
+                dbContext.ItensComanda.Add(novoItem);
             }
 
+            // Atualiza o valor total da comanda
             await dbContext.SaveChangesAsync();
+            
+            // Recalcula o valor total da comanda
+            comanda.ValorTotal = await dbContext.ItensComanda
+                .Where(i => i.ComandaId == comanda.Id)
+                .SumAsync(i => i.PrecoUnitario * i.Quantidade);
+            
+            await dbContext.SaveChangesAsync();
+            
             return StatusCode(StatusCodes.Status201Created);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            // Aqui você pode lidar com a exceção, seja registrando-a, enviando uma resposta de erro adequada para o cliente, etc.
-            // Por exemplo, você pode retornar uma resposta de erro 500 (Internal Server Error) com uma mensagem genérica para o cliente.
             return StatusCode(StatusCodes.Status500InternalServerError,
-                "Ocorreu um erro ao processar a solicitação.");
+                $"Ocorreu um erro ao processar a solicitação: {ex.Message}");
         }
     }
 
@@ -130,22 +141,24 @@ public class ItensComandaController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    //[HttpPut("{produtoId}/{acao}")]
     public async Task<IActionResult> Put(int produtoId, string acao, string nome)
     {
+        // Busca a comanda pelo nome
+        var comanda = await dbContext.Comandas.FirstOrDefaultAsync(c => c.Nome == nome);
+        
+        if (comanda == null)
+        {
+            return NotFound($"Comanda '{nome}' não encontrada.");
+        }
 
         var itemComanda = await dbContext.ItensComanda.FirstOrDefaultAsync(s =>
-                                               s.Nome == nome! && s.ProdutoId == produtoId);
-
-        var comanda = await dbContext.Comandas.FirstOrDefaultAsync(c =>
-                                    c.Nome == nome);
+                                               s.ComandaId == comanda.Id && s.ProdutoId == produtoId);
 
         if (itemComanda != null)
         {
             if (acao.ToLower() == "aumentar")
             {
                 itemComanda.Quantidade += 1;
-
             }
             else if (acao.ToLower() == "diminuir")
             {
@@ -157,7 +170,14 @@ public class ItensComandaController : ControllerBase
                 {
                     dbContext.ItensComanda.Remove(itemComanda);
                     await dbContext.SaveChangesAsync();
-                    return Ok();
+                    
+                    // Recalcula o valor total da comanda após remover o item
+                    comanda.ValorTotal = await dbContext.ItensComanda
+                        .Where(i => i.ComandaId == comanda.Id)
+                        .SumAsync(i => i.PrecoUnitario * i.Quantidade);
+                    
+                    await dbContext.SaveChangesAsync();
+                    return Ok("Item removido com sucesso.");
                 }
             }
             else if (acao.ToLower() == "deletar")
@@ -165,16 +185,24 @@ public class ItensComandaController : ControllerBase
                 // Remove o item do carrinho
                 dbContext.ItensComanda.Remove(itemComanda);
                 await dbContext.SaveChangesAsync();
-                return Ok();
+                
+                // Recalcula o valor total da comanda após remover o item
+                comanda.ValorTotal = await dbContext.ItensComanda
+                    .Where(i => i.ComandaId == comanda.Id)
+                    .SumAsync(i => i.PrecoUnitario * i.Quantidade);
+                
+                await dbContext.SaveChangesAsync();
+                return Ok("Item deletado com sucesso.");
             }
             else
             {
                 return BadRequest("Ação Inválida. Use : 'aumentar', 'diminuir', ou 'deletar' para realizar uma ação");
             }
 
-            //comanda.AtualizarValorTotal();
-
-            dbContext.Comandas.Update(comanda);
+            // Recalcula o valor total da comanda
+            comanda.ValorTotal = await dbContext.ItensComanda
+                .Where(i => i.ComandaId == comanda.Id)
+                .SumAsync(i => i.PrecoUnitario * i.Quantidade);
 
             await dbContext.SaveChangesAsync();
 
@@ -182,7 +210,7 @@ public class ItensComandaController : ControllerBase
         }
         else
         {
-            return NotFound("Nenhum item encontrado no carrinho");
+            return NotFound("Nenhum item encontrado na comanda");
         }
     }
 }

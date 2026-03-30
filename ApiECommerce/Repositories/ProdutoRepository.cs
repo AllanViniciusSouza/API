@@ -91,7 +91,7 @@ public class ProdutoRepository : IProdutoRepository
         if (produto != null)
         {
             produto.Disponivel = false;
-            //_dbContext.Produtos.Remove(produto);
+            _dbContext.Produtos.Remove(produto);
             await _dbContext.SaveChangesAsync();
         }
         else

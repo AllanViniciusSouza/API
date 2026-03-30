@@ -17,6 +17,59 @@ public class PedidosController : ControllerBase
         this.dbContext = dbContext;
     }
 
+    // PUT: api/Pedidos/{id}/finalize
+    // Atualiza campos básicos do pedido e marca como Finalizado se solicitado
+    [HttpPut("{id}/finalize")]
+    public async Task<IActionResult> FinalizarPedido(int id, [FromBody] ApiECommerce.DTOs.PedidoUpdateDTO dto)
+    {
+        var pedido = await dbContext.Pedidos.FindAsync(id);
+        if (pedido == null) return NotFound($"Pedido {id} não encontrado.");
+
+        // Atualiza campos permitidos em produção
+        if (dto.Endereco != null) pedido.Endereco = dto.Endereco;
+        if (dto.FormaPagamento != null) pedido.FormaPagamento = dto.FormaPagamento;
+        if (dto.FormaPagamento2 != null) pedido.FormaPagamento2 = dto.FormaPagamento2;
+        if (dto.Status != null) pedido.Status = dto.Status;
+        if (dto.ClienteNome != null) pedido.ClienteNome = dto.ClienteNome;
+        if (dto.DataPagamentoPrazo.HasValue) pedido.DataPagamentoPrazo = dto.DataPagamentoPrazo;
+        if (dto.DataPagamentoPrazo2.HasValue) pedido.DataPagamentoPrazo2 = dto.DataPagamentoPrazo2;
+        if (dto.Observacoes != null) pedido.Observacoes = dto.Observacoes;
+
+        // Se o cliente pediu para finalizar explicitamente pelo status "Finalizado", garanta regra mínima
+        if (!string.IsNullOrWhiteSpace(dto.Status) && dto.Status.Equals("Finalizado", StringComparison.OrdinalIgnoreCase))
+        {
+            pedido.Status = "Finalizado";
+            // opcional: setar DataPedidoFinalizado = DateTime.UtcNow se existir campo (não altera entidades conforme solicitado)
+        }
+
+        // Se vierem atualizações de itens, aplicar e recalcular totais
+        if (dto.Itens != null && dto.Itens.Any())
+        {
+            // buscar detalhes correspondentes
+            var detalheIds = dto.Itens.Select(i => i.Id).ToList();
+            var detalhes = await dbContext.DetalhesPedido.Where(d => detalheIds.Contains(d.Id) && d.PedidoId == id).ToListAsync();
+
+            foreach (var itemUpdate in dto.Itens)
+            {
+                var detalhe = detalhes.FirstOrDefault(d => d.Id == itemUpdate.Id);
+                if (detalhe == null) continue; // ignora
+
+                if (itemUpdate.Preco.HasValue) detalhe.Preco = itemUpdate.Preco.Value;
+                if (itemUpdate.Quantidade.HasValue) detalhe.Quantidade = itemUpdate.Quantidade.Value;
+
+                // recalcula subtotal do item
+                detalhe.ValorTotal = detalhe.Preco * detalhe.Quantidade;
+            }
+
+            // recalcula total do pedido somando os detalhes (exclui itens ligados a outros pedidos)
+            var novosDetalhes = await dbContext.DetalhesPedido.Where(d => d.PedidoId == id).ToListAsync();
+            pedido.ValorTotal = novosDetalhes.Sum(d => d.ValorTotal);
+        }
+
+        await dbContext.SaveChangesAsync();
+        return Ok(new { Id = pedido.Id, Status = pedido.Status, ValorTotal = pedido.ValorTotal });
+    }
+
     // GET: api/Pedidos/DetalhesPedido/5
     // Retorna os detalhes de um pedido específico, incluindo informações sobre
     // os produtos associados a esse pedido.
@@ -253,7 +306,8 @@ public class PedidosController : ControllerBase
             return BadRequest($"Produtos não encontrados: {string.Join(',', missing)}");
 
         // construir pedido com itens normalizados (somente uma vez)
-        var newPedido = new Pedido {
+        var newPedido = new Pedido
+        {
             Endereco = pedido.Endereco,
             ValorTotal = pedido.ValorTotal,
             DataPedido = DateTime.Now,
@@ -267,7 +321,8 @@ public class PedidosController : ControllerBase
             DataPagamentoPrazo = pedido.DataPagamentoPrazo,
             DataPagamentoPrazo2 = pedido.DataPagamentoPrazo2,
             Observacoes = pedido.Observacoes,
-            Itens = normalizedItems.Select(x => new DetalhePedido {
+            Itens = normalizedItems.Select(x => new DetalhePedido
+            {
                 ProdutoId = (x.ProdutoId.HasValue && x.ProdutoId.Value > 0) ? x.ProdutoId.Value : (int?)null,
                 ProdutoNome = string.IsNullOrWhiteSpace(x.ProdutoNome) ? null : x.ProdutoNome,
                 Preco = x.Preco,
@@ -287,9 +342,9 @@ public class PedidosController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> PostComanda([FromBody] ComandasDTO dto)
     {
-       var itensComanda = await dbContext.ItensComanda
-            .Where(ic => ic.Nome == dto.Nome)
-            .ToListAsync();
+        var itensComanda = await dbContext.ItensComanda
+             .Where(ic => ic.Nome == dto.Nome)
+             .ToListAsync();
 
         var comanda = await dbContext.Comandas
             .FirstOrDefaultAsync(d => d.Id == dto.Id);

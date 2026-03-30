@@ -347,7 +347,7 @@ public class ProdutosController : ControllerBase
 
         try
         {
-            produto.AtualizarDisponibilidade(); // 👈 calcula antes de salvar
+            //produto.AtualizarDisponibilidade(); // 👈 calcula antes de salvar
             await _produtoRepository.AtualizarProdutoAsync(produto);
             return Ok(new { Message = "Produto atualizado com sucesso!", produto });
         }
@@ -373,7 +373,7 @@ public class ProdutosController : ControllerBase
 
         try
         {
-            novoProduto.AtualizarDisponibilidade(); // 👈 calcula antes de salvar
+            //novoProduto.AtualizarDisponibilidade(); // 👈 calcula antes de salvar
             await _produtoRepository.AdicionarProdutoAsync(novoProduto);
             return CreatedAtAction(nameof(GetDetalheProduto), new { id = novoProduto.Id }, novoProduto);
         }
