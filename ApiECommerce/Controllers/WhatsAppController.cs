@@ -25,21 +25,20 @@ namespace ApiECommerce.Controllers
 
             try
             {
-                var url = $"http://localhost:21465/api/{dto.Session}/send-message";
+                var url = $"http://localhost:3000/client/sendMessage/{dto.Session}";
 
                 var payload = new
                 {
-                    phone = dto.Phone,
-                    message = dto.Message,
-                    isGroup = false
+                    chatId = dto.Phone,
+                    contentType = "string",
+                    content = dto.Message
                 };
 
                 var json = JsonSerializer.Serialize(payload);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                // Adiciona o token, se houver
-                string token = "123456"; // ou leia do appsettings ou IOptions
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                _httpClient.DefaultRequestHeaders.Clear();
+                _httpClient.DefaultRequestHeaders.Add("x-api-key", "comunidadezdg.com.br");
 
                 var response = await _httpClient.PostAsync(url, content);
 
