@@ -277,6 +277,39 @@ public class NotasEntradaController : ControllerBase
         return Ok(nota);
     }
 
+    // GET: api/NotasEntrada/verificar/{numeroNota}
+    // Verifica se uma nota fiscal existe pelo número da nota (para integração n8n)
+    [HttpGet("verificar/{numeroNota}")]
+    public async Task<IActionResult> VerificarNotaExiste(string numeroNota)
+    {
+        if (string.IsNullOrWhiteSpace(numeroNota))
+            return BadRequest(new { existe = false, mensagem = "Número da nota não pode ser vazio." });
+
+        var nota = await _db.NotasEntrada
+            .FirstOrDefaultAsync(n => n.NumeroNota == numeroNota);
+
+        if (nota == null)
+        {
+            return Ok(new
+            {
+                existe = false,
+                numeroNota = numeroNota,
+                mensagem = "Nota fiscal não encontrada."
+            });
+        }
+
+        return Ok(new
+        {
+            existe = true,
+            numeroNota = nota.NumeroNota,
+            id = nota.Id,
+            fornecedor = nota.Fornecedor,
+            dataEmissao = nota.DataEmissao,
+            valorTotal = nota.ValorTotal,
+            mensagem = "Nota fiscal já existe no sistema."
+        });
+    }
+
     // GET: api/NotasEntrada
     // Retorna todas as notas com seus itens e informações de produto
     [HttpGet]
@@ -305,5 +338,98 @@ public class NotasEntradaController : ControllerBase
             }).ToListAsync();
 
         return Ok(notas);
+    }
+
+    // DELETE: api/NotasEntrada/{id}
+    // Deleta uma nota fiscal pelo ID
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeletarNotaPorId(int id)
+    {
+        var nota = await _db.NotasEntrada
+            .Include(n => n.Itens)
+            .FirstOrDefaultAsync(n => n.Id == id);
+
+        if (nota == null)
+        {
+            return NotFound(new
+            {
+                sucesso = false,
+                mensagem = $"Nota fiscal com ID {id} não encontrada."
+            });
+        }
+
+        try
+        {
+            // Remove a nota (os itens serão removidos em cascata se configurado)
+            _db.NotasEntrada.Remove(nota);
+            await _db.SaveChangesAsync();
+
+            return Ok(new
+            {
+                sucesso = true,
+                id = id,
+                numeroNota = nota.NumeroNota,
+                mensagem = "Nota fiscal deletada com sucesso."
+            });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new
+            {
+                sucesso = false,
+                mensagem = $"Erro ao deletar nota fiscal: {ex.Message}"
+            });
+        }
+    }
+
+    // DELETE: api/NotasEntrada/numero/{numeroNota}
+    // Deleta uma nota fiscal pelo número da nota
+    [HttpDelete("numero/{numeroNota}")]
+    public async Task<IActionResult> DeletarNotaPorNumero(string numeroNota)
+    {
+        if (string.IsNullOrWhiteSpace(numeroNota))
+        {
+            return BadRequest(new
+            {
+                sucesso = false,
+                mensagem = "Número da nota não pode ser vazio."
+            });
+        }
+
+        var nota = await _db.NotasEntrada
+            .Include(n => n.Itens)
+            .FirstOrDefaultAsync(n => n.NumeroNota == numeroNota);
+
+        if (nota == null)
+        {
+            return NotFound(new
+            {
+                sucesso = false,
+                mensagem = $"Nota fiscal com número '{numeroNota}' não encontrada."
+            });
+        }
+
+        try
+        {
+            // Remove a nota (os itens serão removidos em cascata se configurado)
+            _db.NotasEntrada.Remove(nota);
+            await _db.SaveChangesAsync();
+
+            return Ok(new
+            {
+                sucesso = true,
+                id = nota.Id,
+                numeroNota = numeroNota,
+                mensagem = "Nota fiscal deletada com sucesso."
+            });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new
+            {
+                sucesso = false,
+                mensagem = $"Erro ao deletar nota fiscal: {ex.Message}"
+            });
+        }
     }
 }

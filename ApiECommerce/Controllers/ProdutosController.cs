@@ -337,6 +337,71 @@ public class ProdutosController : ControllerBase
         return Ok(dadosProduto);
     }
 
+    // GET: api/Produtos/barcode/{barcode}
+    // Busca um produto pelo código de barras
+    [HttpGet("barcode/{barcode}")]
+    public async Task<IActionResult> GetProdutoPorBarcode(string barcode)
+    {
+        if (string.IsNullOrWhiteSpace(barcode))
+        {
+            return BadRequest(new
+            {
+                sucesso = false,
+                mensagem = "Código de barras não pode ser vazio."
+            });
+        }
+
+        try
+        {
+            var produtos = await _produtoRepository.ObterTodosProdutosAsync();
+            var produto = produtos.FirstOrDefault(p => p.Barcode == barcode);
+
+            if (produto == null)
+            {
+                return NotFound(new
+                {
+                    sucesso = false,
+                    barcode = barcode,
+                    mensagem = "Produto não encontrado com este código de barras."
+                });
+            }
+
+            var dadosProduto = new
+            {
+                sucesso = true,
+                produto = new
+                {
+                    Id = produto.Id,
+                    Nome = produto.Nome,
+                    Preco = produto.PrecoRetirar,
+                    PrecoQuente = produto.PrecoQuente,
+                    PrecoGelada = produto.PrecoGelada,
+                    PrecoEntrega = produto.PrecoEntrega,
+                    PrecoRetirar = produto.PrecoRetirar,
+                    Barcode = produto.Barcode,
+                    Detalhe = produto.Detalhe,
+                    UrlImagem = produto.UrlImagem,
+                    CategoriaId = produto.CategoriaId,
+                    Popular = produto.Popular,
+                    DiasDisponiveis = produto.DiasDisponiveis,
+                    Disponivel = produto.Disponivel,
+                    EmEstoque = produto.EmEstoque
+                }
+            };
+
+            return Ok(dadosProduto);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new
+            {
+                sucesso = false,
+                mensagem = "Ocorreu um erro ao processar sua solicitação.",
+                erro = ex.Message
+            });
+        }
+    }
+
     [HttpPut("{id}")]
     public async Task<IActionResult> AtualizarProduto(int id, [FromBody] Produto produto)
     {
@@ -480,6 +545,224 @@ public class ProdutosController : ControllerBase
         return Ok();
     }
 
-        
+    // POST: api/Produtos/match
+    // Recebe array de produtos e retorna quais foram encontrados e quais não foram
+    [HttpPost("match")]
+    public async Task<IActionResult> MatchProdutos([FromBody] List<ProdutoMatchDTO> produtosParaBuscar)
+    {
+        if (produtosParaBuscar == null || !produtosParaBuscar.Any())
+        {
+            return BadRequest(new
+            {
+                sucesso = false,
+                mensagem = "Lista de produtos não pode ser vazia."
+            });
+        }
 
+        try
+        {
+            var todosProdutos = await _produtoRepository.ObterTodosProdutosAsync();
+            var produtosEncontrados = new List<object>();
+            var produtosNaoEncontrados = new List<object>();
+
+            foreach (var itemBusca in produtosParaBuscar)
+            {
+                Produto produtoEncontrado = null;
+                string metodoMatch = null;
+                double scoreSimilaridade = 0;
+
+                // 1. Busca exata por código de barras (prioridade máxima)
+                if (!string.IsNullOrWhiteSpace(itemBusca.Barcode))
+                {
+                    produtoEncontrado = todosProdutos.FirstOrDefault(p =>
+                        !string.IsNullOrWhiteSpace(p.Barcode) &&
+                        p.Barcode.Equals(itemBusca.Barcode, StringComparison.OrdinalIgnoreCase));
+
+                    if (produtoEncontrado != null)
+                    {
+                        metodoMatch = "Barcode Exato";
+                        scoreSimilaridade = 100;
+                    }
+                }
+
+                // 2. Busca exata por nome
+                if (produtoEncontrado == null && !string.IsNullOrWhiteSpace(itemBusca.Nome))
+                {
+                    produtoEncontrado = todosProdutos.FirstOrDefault(p =>
+                        p.Nome != null &&
+                        p.Nome.Equals(itemBusca.Nome, StringComparison.OrdinalIgnoreCase));
+
+                    if (produtoEncontrado != null)
+                    {
+                        metodoMatch = "Nome Exato";
+                        scoreSimilaridade = 95;
+                    }
+                }
+
+                // 3. Busca por similaridade de nome (contém)
+                if (produtoEncontrado == null && !string.IsNullOrWhiteSpace(itemBusca.Nome))
+                {
+                    var nomeBuscaLimpo = LimparTexto(itemBusca.Nome);
+                    var palavrasBusca = nomeBuscaLimpo.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+                    var candidatos = todosProdutos
+                        .Select(p => new {
+                            Produto = p,
+                            Score = CalcularScoreSimilaridade(p.Nome, palavrasBusca)
+                        })
+                        .Where(x => x.Score > 50) // Score mínimo de 50%
+                        .OrderByDescending(x => x.Score)
+                        .ToList();
+
+                    if (candidatos.Any())
+                    {
+                        var melhorCandidato = candidatos.First();
+                        produtoEncontrado = melhorCandidato.Produto;
+                        scoreSimilaridade = melhorCandidato.Score;
+                        metodoMatch = "Similaridade de Nome";
+                    }
+                }
+
+                // 4. Busca por barcode parcial (últimos dígitos)
+                if (produtoEncontrado == null && !string.IsNullOrWhiteSpace(itemBusca.Barcode) && itemBusca.Barcode.Length >= 6)
+                {
+                    var ultimosDigitos = itemBusca.Barcode.Substring(itemBusca.Barcode.Length - 6);
+                    produtoEncontrado = todosProdutos.FirstOrDefault(p =>
+                        !string.IsNullOrWhiteSpace(p.Barcode) &&
+                        p.Barcode.EndsWith(ultimosDigitos));
+
+                    if (produtoEncontrado != null)
+                    {
+                        metodoMatch = "Barcode Parcial";
+                        scoreSimilaridade = 70;
+                    }
+                }
+
+                // Adiciona à lista apropriada
+                if (produtoEncontrado != null)
+                {
+                    produtosEncontrados.Add(new
+                    {
+                        itemBuscado = new
+                        {
+                            nome = itemBusca.Nome,
+                            barcode = itemBusca.Barcode,
+                            preco = itemBusca.Preco
+                        },
+                        produtoEncontrado = new
+                        {
+                            id = produtoEncontrado.Id,
+                            nome = produtoEncontrado.Nome,
+                            barcode = produtoEncontrado.Barcode,
+                            preco = produtoEncontrado.PrecoRetirar,
+                            precoQuente = produtoEncontrado.PrecoQuente,
+                            precoGelada = produtoEncontrado.PrecoGelada,
+                            precoEntrega = produtoEncontrado.PrecoEntrega,
+                            precoRetirar = produtoEncontrado.PrecoRetirar,
+                            urlImagem = produtoEncontrado.UrlImagem,
+                            categoriaId = produtoEncontrado.CategoriaId,
+                            emEstoque = produtoEncontrado.EmEstoque,
+                            disponivel = produtoEncontrado.Disponivel
+                        },
+                        metodoMatch = metodoMatch,
+                        scoreSimilaridade = Math.Round(scoreSimilaridade, 2)
+                    });
+                }
+                else
+                {
+                    produtosNaoEncontrados.Add(new
+                    {
+                        nome = itemBusca.Nome,
+                        barcode = itemBusca.Barcode,
+                        preco = itemBusca.Preco,
+                        motivo = "Nenhum produto compatível encontrado no banco de dados"
+                    });
+                }
+            }
+
+            return Ok(new
+            {
+                sucesso = true,
+                totalBuscados = produtosParaBuscar.Count,
+                totalEncontrados = produtosEncontrados.Count,
+                totalNaoEncontrados = produtosNaoEncontrados.Count,
+                produtosEncontrados = produtosEncontrados,
+                produtosNaoEncontrados = produtosNaoEncontrados
+            });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new
+            {
+                sucesso = false,
+                mensagem = "Ocorreu um erro ao processar sua solicitação.",
+                erro = ex.Message
+            });
+        }
+    }
+
+    // Método auxiliar para limpar texto
+    private string LimparTexto(string texto)
+    {
+        if (string.IsNullOrWhiteSpace(texto)) return string.Empty;
+
+        return texto
+            .ToLowerInvariant()
+            .Normalize(System.Text.NormalizationForm.FormD)
+            .Replace("ç", "c")
+            .Replace("ã", "a")
+            .Replace("á", "a")
+            .Replace("à", "a")
+            .Replace("â", "a")
+            .Replace("é", "e")
+            .Replace("ê", "e")
+            .Replace("í", "i")
+            .Replace("ó", "o")
+            .Replace("ô", "o")
+            .Replace("õ", "o")
+            .Replace("ú", "u")
+            .Trim();
+    }
+
+    // Método auxiliar para calcular score de similaridade
+    private double CalcularScoreSimilaridade(string nomeProduto, string[] palavrasBusca)
+    {
+        if (string.IsNullOrWhiteSpace(nomeProduto)) return 0;
+
+        var nomeProdutoLimpo = LimparTexto(nomeProduto);
+        var palavrasProduto = nomeProdutoLimpo.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        int palavrasEncontradas = 0;
+        foreach (var palavraBusca in palavrasBusca)
+        {
+            if (palavraBusca.Length < 3) continue; // Ignora palavras muito curtas
+
+            // Verifica se alguma palavra do produto contém ou é contida pela palavra de busca
+            if (palavrasProduto.Any(pp =>
+                pp.Contains(palavraBusca) ||
+                palavraBusca.Contains(pp) ||
+                nomeProdutoLimpo.Contains(palavraBusca)))
+            {
+                palavrasEncontradas++;
+            }
+        }
+
+        // Score baseado na proporção de palavras encontradas
+        double score = palavrasBusca.Length > 0
+            ? (double)palavrasEncontradas / palavrasBusca.Length * 100
+            : 0;
+
+        return score;
+    }
+
+
+
+}
+
+// DTO para matching de produtos
+public class ProdutoMatchDTO
+{
+    public string? Nome { get; set; }
+    public string? Barcode { get; set; }
+    public decimal? Preco { get; set; }
 }
